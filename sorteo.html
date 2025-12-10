@@ -6,10 +6,10 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 
-
 <body>
   <div class="app">
-    <div class="card">
+    <!-- PANTALLA 1: INGRESAR PARTICIPANTES -->
+    <div id="setupScreen" class="card">
       <div>
         <div class="badge">
           <div class="badge-dot"></div>
@@ -22,8 +22,9 @@
 
         <div class="textarea-label">
           <span>Participantes</span>
+          <small>1 nombre por línea</small>
         </div>
-        <textarea id="participants" ></textarea>
+        <textarea id="participants"></textarea>
 
         <div class="controls">
           <button id="drawButton" class="button">
@@ -33,43 +34,66 @@
 
           <label class="winner-config" title="Cuántos ganadores quieres que se elijan">
             Ganadores:
-            <input type="number" id="winnerCountInput" value="10" min="1" max="1000" />
+            <input type="number" id="winnerCountInput" value="3" min="1" max="1000" />
           </label>
+        </div>
+      </div>
+    </div>
 
+    <!-- PANTALLA 2: RULETA VERTICAL -->
+    <div id="drawScreen" class="card hidden">
+      <div class="draw-header">
+        <button id="backButton" class="icon-button" title="Volver a ingresar participantes">
+          ← Volver
+        </button>
+
+        <div class="draw-status">
+          <div class="draw-title">Sorteo en progreso</div>
+          <div class="draw-subtitle">
+            Ganadores: <span id="winnersSoFar">0</span>/<span id="winnersTotal">0</span> ·
+            Restantes: <span id="participantsRemaining">0</span>
+          </div>
         </div>
       </div>
 
-      <div class="winner-panel">
-        <div class="winner-header">
-          <div>
-            <div class="winner-title">Ganadores</div>
-            <div class="winner-count" id="winnerCountLabel">0 / 0 mostrados</div>
-          </div>
-          <div class="live-indicator" id="liveIndicator">
-            <span class="live-dot"></span>
-            <span id="liveText">Listo para comenzar</span>
+      <div class="roulette-wrapper">
+        <div class="roulette-title">Ruleta de nombres</div>
+
+        <div class="roulette-container">
+          <div id="rouletteViewport" class="roulette-viewport">
+            <div id="rouletteList" class="roulette-list">
+              <!-- Items dinámicos -->
+            </div>
+
+            <!-- Banda central con flechas -->
+            <div class="roulette-highlight">
+              <div class="roulette-arrow left"></div>
+              <div class="roulette-arrow right"></div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div class="current-winner-box">
-          <div id="currentWinner" class="current-winner-name">
-            Esperando sorteo…
-          </div>
-        </div>
-
-        <div class="winner-list" id="winnerList"></div>
+      <div class="draw-controls">
+        <button id="selectWinnerButton" class="button">
+          <span class="icon">🎯</span>
+          <span>Seleccionar ganador</span>
+        </button>
+        <span class="helper-text" id="drawHelperText">
+          La ruleta girará y se detendrá en un ganador al azar.
+        </span>
       </div>
     </div>
   </div>
 
-
-<div id="winnerOverlay" class="winner-overlay">
+  <!-- OVERLAY PANTALLA COMPLETA PARA GANADOR -->
+  <div id="winnerOverlay" class="winner-overlay">
     <div class="winner-overlay-content">
       <div class="winner-overlay-title">🎉 GANADOR 🎉</div>
       <div id="winnerOverlayName" class="winner-overlay-name">Nombre</div>
     </div>
   </div>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

@@ -1,13 +1,28 @@
 const participantsTextarea = document.getElementById('participants');
 const drawButton = document.getElementById('drawButton');
-const currentWinnerEl = document.getElementById('currentWinner');
-const winnerListEl = document.getElementById('winnerList');
-const winnerCountLabel = document.getElementById('winnerCountLabel');
-const liveText = document.getElementById('liveText');
 const winnerCountInput = document.getElementById('winnerCountInput');
+
+const setupScreen = document.getElementById('setupScreen');
+const drawScreen = document.getElementById('drawScreen');
+const backButton = document.getElementById('backButton');
+
+const rouletteViewport = document.getElementById('rouletteViewport');
+const rouletteListEl = document.getElementById('rouletteList');
+
+const selectWinnerButton = document.getElementById('selectWinnerButton');
+const winnersSoFarEl = document.getElementById('winnersSoFar');
+const winnersTotalEl = document.getElementById('winnersTotal');
+const participantsRemainingEl = document.getElementById('participantsRemaining');
+const drawHelperText = document.getElementById('drawHelperText');
 
 const winnerOverlay = document.getElementById('winnerOverlay');
 const winnerOverlayName = document.getElementById('winnerOverlayName');
+
+let allParticipants = [];
+let remainingParticipants = [];
+let winners = [];
+let requestedWinners = 0;
+let isSelecting = false;
 
 function showToast(message, icon = "⚠️") {
   const toast = document.createElement('div');
@@ -30,9 +45,10 @@ function showToast(message, icon = "⚠️") {
   }, 3500);
 }
 
+// Confeti intenso
 function createConfettiBurst() {
   const colors = ['#f97316', '#facc15', '#22c55e', '#38bdf8', '#a855f7', '#ec4899'];
-  const pieces = 130; 
+  const pieces = 130;
 
   for (let i = 0; i < pieces; i++) {
     const piece = document.createElement('div');
@@ -65,74 +81,142 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function updateWinnerCount(current, total) {
-  winnerCountLabel.textContent = `${current} / ${total} mostrados`;
-}
+function updateStatus() {
+  winnersSoFarEl.textContent = winners.length.toString();
+  winnersTotalEl.textContent = requestedWinners.toString();
+  participantsRemainingEl.textContent = remainingParticipants.length.toString();
 
-function addWinnerToList(name, index) {
-  const item = document.createElement('div');
-  item.className = 'winner-item';
-
-  const medalEmoji =
-    index === 0 ? '🥇' :
-    index === 1 ? '🥈' :
-    index === 2 ? '🥉' : '🏅';
-
-  item.innerHTML = `
-    <div class="winner-medal">${medalEmoji}</div>
-    <div class="winner-text">
-      ${name}
-      <div class="winner-position">Lugar #${index + 1}</div>
-    </div>
-  `;
-  winnerListEl.appendChild(item);
-}
-
-async function animateSingleWinner(name, index, total) {
-  liveText.textContent = `Seleccionando ganador #${index + 1}…`;
-
-  const spinDuration = 1600; // ms
-  const intervalSpeed = 90;
-  const startTime = Date.now();
-
-  const allNames = winnerListEl.dataset.allNames
-    ? JSON.parse(winnerListEl.dataset.allNames)
-    : [];
-
-  const spinInterval = setInterval(() => {
-    if (allNames.length === 0) return;
-    const randomName = allNames[Math.floor(Math.random() * allNames.length)];
-    currentWinnerEl.textContent = randomName;
-  }, intervalSpeed);
-
-  while (Date.now() - startTime < spinDuration) {
-    await sleep(80);
+  if (winners.length >= requestedWinners || remainingParticipants.length === 0) {
+    selectWinnerButton.disabled = true;
+    drawHelperText.textContent = 'Sorteo terminado. Puedes volver atrás para un nuevo sorteo.';
+  } else {
+    selectWinnerButton.disabled = false;
+    drawHelperText.textContent = 'La ruleta girará y se detendrá en un ganador al azar.';
   }
+}
 
-  clearInterval(spinInterval);
+function renderBaseRouletteList() {
+  rouletteListEl.innerHTML = '';
 
+  remainingParticipants.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'roulette-item';
+    item.dataset.id = p.id.toString();
+    item.textContent = p.name;
+    rouletteListEl.appendChild(item);
+  });
+
+  rouletteListEl.style.transition = 'none';
+  rouletteListEl.style.transform = 'translateY(0px)';
+}
+
+async function showWinnerOverlay(name) {
   winnerOverlayName.textContent = name;
   winnerOverlayName.classList.remove('animate');
-  void winnerOverlayName.offsetWidth; 
+  void winnerOverlayName.offsetWidth; // reflow
   winnerOverlayName.classList.add('animate');
 
   winnerOverlay.classList.add('show');
   createConfettiBurst();
   setTimeout(createConfettiBurst, 600);
 
-  currentWinnerEl.textContent = name;
-
   await sleep(1800);
 
   winnerOverlay.classList.remove('show');
-
-  addWinnerToList(name, index);
-  updateWinnerCount(index + 1, total);
-
-  await sleep(500);
 }
 
-async function drawWinners() {
+async function selectRandomWinner() {
+  if (isSelecting) return;
+
+  if (remainingParticipants.length === 0) {
+    showToast("Ya no hay participantes restantes.", "ℹ️");
+    return;
+  }
+  if (winners.length >= requestedWinners) {
+    showToast("Ya alcanzaste el número máximo de ganadores.", "ℹ️");
+    updateStatus();
+    return;
+  }
+
+  isSelecting = true;
+  selectWinnerButton.disabled = true;
+
+  // Elegimos ganador al azar de los que quedan
+  const randomIndex = Math.floor(Math.random() * remainingParticipants.length);
+  const winnerObj = remainingParticipants[randomIndex];
+
+  // Construimos lista extendida para que dé varias vueltas
+  const loops = 4;
+  const extendedList = [];
+  for (let i = 0; i < loops; i++) {
+    extendedList.push(...remainingParticipants);
+  }
+
+  rouletteListEl.innerHTML = '';
+  extendedList.forEach(p => {
+    const item = document.createElement('div');
+    item.className = 'roulette-item';
+    item.dataset.id = p.id.toString();
+    item.textContent = p.name;
+    rouletteListEl.appendChild(item);
+  });
+
+  await sleep(50); // dejar que el DOM mida alturas
+
+  const items = rouletteListEl.querySelectorAll('.roulette-item');
+  if (items.length === 0) {
+    isSelecting = false;
+    selectWinnerButton.disabled = false;
+    return;
+  }
+
+  const rowHeight = items[0].offsetHeight;
+  const viewportHeight = rouletteViewport.clientHeight;
+  const highlightOffset = viewportHeight / 2 - rowHeight / 2;
+
+  const baseIndex = remainingParticipants.findIndex(p => p.id === winnerObj.id);
+  const perLoop = remainingParticipants.length;
+  const targetIndex = (loops - 1) * perLoop + baseIndex;
+
+  const finalTranslate = -(targetIndex * rowHeight - highlightOffset);
+
+  // 🔥 Duración total del giro: 10 segundos
+  const spinDurationMs = 10000;
+
+  // Posición inicial
+  rouletteListEl.style.transition = 'none';
+  rouletteListEl.style.transform = 'translateY(0px)';
+
+  // Siguiente frame: activamos transición y movemos
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      // Curva con inicio rápido y frenado MUY suave al final
+      rouletteListEl.style.transition =
+        `transform ${spinDurationMs}ms cubic-bezier(0.08, 0.8, 0.12, 1)`;
+      rouletteListEl.style.transform = `translateY(${finalTranslate}px)`;
+    });
+  });
+
+  // Esperamos a que termine el giro (un poco más por seguridad)
+  await sleep(spinDurationMs + 600);
+
+  // Overlay del ganador
+  await showWinnerOverlay(winnerObj.name);
+
+  // Actualizar estructuras: sacar ganador de la lista
+  winners.push(winnerObj);
+  remainingParticipants.splice(randomIndex, 1);
+  updateStatus();
+
+  // Volver a mostrar ruleta base con los que quedan
+  renderBaseRouletteList();
+
+  isSelecting = false;
+}
+
+/* --------- Flujo principal --------- */
+
+async function startDraw() {
   const lines = participantsTextarea.value
     .split('\n')
     .map(l => l.trim())
@@ -143,47 +227,71 @@ async function drawWinners() {
     return;
   }
 
-  let requestedWinners = parseInt(winnerCountInput.value, 10);
-
-  if (isNaN(requestedWinners) || requestedWinners <= 0) {
-    requestedWinners = 1;
-    winnerCountInput.value = "1";
+  let requested = parseInt(winnerCountInput.value, 10);
+  if (isNaN(requested) || requested <= 0) {
+    requested = 1;
+    winnerCountInput.value = '1';
   }
 
-  if (lines.length < requestedWinners) {
+  if (lines.length < requested) {
     showToast(
-      `Pediste ${requestedWinners} ganador(es), pero solo hay ${lines.length} participante(s). Se sortearán todos ellos.`,
+      `Pediste ${requested} ganador(es), pero solo hay ${lines.length} participante(s). Se sortearán todos ellos.`,
       "ℹ️"
     );
   }
 
-  const winnerTotal = Math.min(requestedWinners, lines.length);
+  requestedWinners = Math.min(requested, lines.length);
 
-  const shuffled = shuffle([...lines]);
-  const winners = shuffled.slice(0, winnerTotal);
+  allParticipants = lines.map((name, index) => ({
+    id: index + 1,
+    name
+  }));
 
-  winnerListEl.dataset.allNames = JSON.stringify(lines);
+  remainingParticipants = shuffle([...allParticipants]);
+  winners = [];
 
-  winnerListEl.innerHTML = "";
-  updateWinnerCount(0, winnerTotal);
-  currentWinnerEl.textContent = 'Preparando sorteo…';
-  liveText.textContent = 'Sorteo en progreso';
-  drawButton.disabled = true;
+  renderBaseRouletteList();
+  updateStatus();
 
-  await sleep(500);
-
-  for (let i = 0; i < winners.length; i++) {
-    await animateSingleWinner(winners[i], i, winnerTotal);
-  }
-
-  liveText.textContent = 'Sorteo finalizado 🎉';
-  drawButton.disabled = false;
+  setupScreen.classList.add('hidden');
+  drawScreen.classList.remove('hidden');
 }
 
+function resetToSetup() {
+  allParticipants = [];
+  remainingParticipants = [];
+  winners = [];
+  requestedWinners = 0;
+  isSelecting = false;
+
+  rouletteListEl.innerHTML = '';
+  winnersSoFarEl.textContent = '0';
+  winnersTotalEl.textContent = '0';
+  participantsRemainingEl.textContent = '0';
+  drawHelperText.textContent = 'La ruleta girará y se detendrá en un ganador al azar.';
+
+  drawScreen.classList.add('hidden');
+  setupScreen.classList.remove('hidden');
+}
+
+/* --------- Event listeners --------- */
+
 drawButton.addEventListener('click', () => {
-  drawWinners().catch(err => {
+  startDraw().catch(err => {
     console.error(err);
-    drawButton.disabled = false;
-    showToast("Ocurrió un error inesperado en el sorteo.", "💥");
+    showToast("Ocurrió un error al iniciar el sorteo.", "💥");
   });
+});
+
+selectWinnerButton.addEventListener('click', () => {
+  selectRandomWinner().catch(err => {
+    console.error(err);
+    isSelecting = false;
+    selectWinnerButton.disabled = false;
+    showToast("Ocurrió un error al seleccionar el ganador.", "💥");
+  });
+});
+
+backButton.addEventListener('click', () => {
+  resetToSetup();
 });
