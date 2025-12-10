@@ -11,8 +11,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top, #1e293b, #020617);
-  color: #e5e7eb;
+  /* Fondo con Pantone 293 U (#1f4e9b) */
+  background: radial-gradient(circle at top, #1f4e9b, #0d2a5e);
+  color: #cce6f6; /* Pantone 7457 U para texto */
   overflow: hidden;
 }
 
@@ -23,11 +24,12 @@ body {
 }
 
 .card {
-  background: rgba(15, 23, 42, 0.95);
+  /* Fondo con Pantone 293 U con opacidad */
+  background: rgba(31, 78, 155, 0.95);
   border-radius: 28px;
   padding: 32px 34px 40px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  border: 1px solid rgba(127, 147, 160, 0.25); /* Pantone 7697 U */
   backdrop-filter: blur(18px);
 }
 
@@ -35,6 +37,7 @@ body {
   display: none;
 }
 
+/* Encabezados y badges */
 
 .title {
   font-size: 34px;
@@ -44,23 +47,24 @@ body {
   align-items: center;
   gap: 12px;
   margin-bottom: 12px;
+  color: #cce6f6; /* Pantone 7457 U */
 }
 
 .title span.emoji {
   font-size: 38px;
-  filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.8));
+  filter: drop-shadow(0 0 10px rgba(148, 191, 86, 0.8)); /* Pantone 375 U */
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #f97316;
-  background: rgba(248, 250, 252, 0.03);
+  color: #94bf56; /* Pantone 375 U */
+  background: rgba(204, 230, 246, 0.1); /* Pantone 7457 U con opacidad */
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 13px;
-  border: 1px solid rgba(249, 115, 22, 0.35);
+  border: 1px solid rgba(148, 191, 86, 0.5); /* Pantone 375 U */
   margin-bottom: 10px;
 }
 
@@ -68,8 +72,8 @@ body {
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: radial-gradient(circle, #f97316, #facc15);
-  box-shadow: 0 0 10px rgba(249, 115, 22, 0.9);
+  background: radial-gradient(circle, #94bf56, #b8d98d); /* Pantone 375 U y variante */
+  box-shadow: 0 0 10px rgba(148, 191, 86, 0.9); /* Pantone 375 U */
   animation: pulse 1.3s infinite alternate;
 }
 
@@ -80,11 +84,12 @@ body {
   }
 }
 
+/* Textarea y controles iniciales */
 
 .textarea-label {
   font-size: 16px;
   margin-bottom: 8px;
-  color: #e5e7eb;
+  color: #cce6f6; /* Pantone 7457 U */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -92,7 +97,7 @@ body {
 
 .textarea-label small {
   font-size: 13px;
-  color: #9ca3af;
+  color: #7f93a0; /* Pantone 7697 U */
 }
 
 textarea {
@@ -100,9 +105,9 @@ textarea {
   min-height: 320px;
   resize: vertical;
   border-radius: 18px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  background: rgba(15, 23, 42, 0.9);
-  color: #e5e7eb;
+  border: 1px solid rgba(127, 147, 160, 0.6); /* Pantone 7697 U */
+  background: rgba(31, 78, 155, 0.9); /* Pantone 293 U con opacidad */
+  color: #cce6f6; /* Pantone 7457 U */
   padding: 18px 18px 18px 20px;
   font-size: 16px;
   line-height: 1.5;
@@ -111,8 +116,8 @@ textarea {
 }
 
 textarea:focus {
-  border-color: #f97316;
-  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.6);
+  border-color: #94bf56; /* Pantone 375 U */
+  box-shadow: 0 0 0 1px rgba(148, 191, 86, 0.6); /* Pantone 375 U */
   transform: translateY(-1px);
 }
 
@@ -124,6 +129,7 @@ textarea:focus {
   gap: 16px;
 }
 
+/* Botones */
 
 .button {
   position: relative;
@@ -135,13 +141,14 @@ textarea:focus {
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  background: linear-gradient(135deg, #f97316, #facc15);
-  color: #111827;
+  /* Gradiente con Pantone 375 U y variante más clara */
+  background: linear-gradient(135deg, #94bf56, #b8d98d);
+  color: #1f4e9b; /* Pantone 293 U para texto en botones */
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 22px 50px rgba(248, 181, 0, 0.45);
+  box-shadow: 0 22px 50px rgba(148, 191, 86, 0.45); /* Pantone 375 U */
   transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s;
 }
 
@@ -151,13 +158,13 @@ textarea:focus {
 
 .button:hover:not(:disabled) {
   transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 26px 60px rgba(250, 204, 21, 0.55);
+  box-shadow: 0 26px 60px rgba(148, 191, 86, 0.55); /* Pantone 375 U */
   filter: brightness(1.05);
 }
 
 .button:active:not(:disabled) {
   transform: translateY(1px) scale(0.99);
-  box-shadow: 0 12px 30px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 12px 30px rgba(148, 191, 86, 0.4); /* Pantone 375 U */
 }
 
 .button:disabled {
@@ -169,9 +176,9 @@ textarea:focus {
 .icon-button {
   background: transparent;
   border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.6);
+  border: 1px solid rgba(127, 147, 160, 0.6); /* Pantone 7697 U */
   padding: 6px 14px;
-  color: #e5e7eb;
+  color: #cce6f6; /* Pantone 7457 U */
   cursor: pointer;
   font-size: 14px;
   display: inline-flex;
@@ -180,21 +187,21 @@ textarea:focus {
 }
 
 .icon-button:hover {
-  background: rgba(15, 23, 42, 0.9);
+  background: rgba(31, 78, 155, 0.9); /* Pantone 293 U con opacidad */
 }
 
-/* Selector de ganadores */
+/* Selector de ganadores (si se usa) */
 
 .winner-config {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #e5e7eb;
-  background: rgba(15, 23, 42, 0.8);
+  color: #cce6f6; /* Pantone 7457 U */
+  background: rgba(31, 78, 155, 0.8); /* Pantone 293 U con opacidad */
   padding: 8px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.6);
+  border: 1px solid rgba(127, 147, 160, 0.6); /* Pantone 7697 U */
 }
 
 .winner-config input {
@@ -204,20 +211,21 @@ textarea:focus {
   padding: 6px 10px;
   font-size: 14px;
   text-align: center;
-  background: rgba(15, 23, 42, 1);
-  color: #e5e7eb;
+  background: rgba(31, 78, 155, 1); /* Pantone 293 U */
+  color: #cce6f6; /* Pantone 7457 U */
   outline: none;
 }
 
 .winner-config input:focus {
-  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.8);
+  box-shadow: 0 0 0 1px rgba(148, 191, 86, 0.8); /* Pantone 375 U */
 }
 
 .helper-text {
   font-size: 13px;
-  color: #9ca3af;
+  color: #7f93a0; /* Pantone 7697 U */
 }
 
+/* Pantalla 2: Ruleta */
 
 .draw-header {
   display: flex;
@@ -233,11 +241,12 @@ textarea:focus {
 .draw-title {
   font-size: 20px;
   font-weight: 600;
+  color: #cce6f6; /* Pantone 7457 U */
 }
 
 .draw-subtitle {
   font-size: 14px;
-  color: #9ca3af;
+  color: #7f93a0; /* Pantone 7697 U */
   margin-top: 4px;
 }
 
@@ -248,15 +257,17 @@ textarea:focus {
 .roulette-title {
   font-size: 16px;
   margin-bottom: 8px;
-  color: #e5e7eb;
+  color: #cce6f6; /* Pantone 7457 U */
 }
 
 .roulette-container {
   position: relative;
   border-radius: 26px;
-  border: 2px solid rgba(148, 163, 184, 0.7);
-  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.99));
-  box-shadow: inset 0 0 20px rgba(15, 23, 42, 1);
+  border: 2px solid rgba(127, 147, 160, 0.7); /* Pantone 7697 U */
+  background: linear-gradient(to bottom, 
+    rgba(31, 78, 155, 0.95), 
+    rgba(31, 78, 155, 0.99)); /* Pantone 293 U */
+  box-shadow: inset 0 0 20px rgba(31, 78, 155, 1); /* Pantone 293 U */
   padding: 12px 40px;
 }
 
@@ -283,11 +294,12 @@ textarea:focus {
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #9ca3af;
+  color: #7f93a0; /* Pantone 7697 U */
   opacity: 0.7;
   padding: 0 16px;
 }
 
+/* Banda central con flechas */
 
 .roulette-highlight {
   pointer-events: none;
@@ -297,12 +309,12 @@ textarea:focus {
   top: 50%;
   height: 64px;
   transform: translateY(-50%);
-  background: rgba(134, 239, 172, 0.12);
-  border-top: 2px solid rgba(74, 222, 128, 0.9);
-  border-bottom: 2px solid rgba(74, 222, 128, 0.9);
+  background: rgba(148, 191, 86, 0.12); /* Pantone 375 U con opacidad */
+  border-top: 2px solid rgba(148, 191, 86, 0.9); /* Pantone 375 U */
+  border-bottom: 2px solid rgba(148, 191, 86, 0.9); /* Pantone 375 U */
   box-shadow:
-    0 0 20px rgba(21, 128, 61, 0.6),
-    inset 0 0 12px rgba(15, 23, 42, 0.9);
+    0 0 20px rgba(148, 191, 86, 0.6), /* Pantone 375 U */
+    inset 0 0 12px rgba(31, 78, 155, 0.9); /* Pantone 293 U */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -317,15 +329,15 @@ textarea:focus {
 }
 
 .roulette-arrow.left {
-  border-right: 26px solid #f97316; 
+  border-right: 26px solid #94bf56; /* Pantone 375 U */
   margin-left: -26px;
-  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.9));
+  filter: drop-shadow(0 0 6px rgba(148, 191, 86, 0.9)); /* Pantone 375 U */
 }
 
 .roulette-arrow.right {
-  border-left: 26px solid #f97316;  
+  border-left: 26px solid #94bf56; /* Pantone 375 U */
   margin-right: -26px;
-  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.9));
+  filter: drop-shadow(0 0 6px rgba(148, 191, 86, 0.9)); /* Pantone 375 U */
 }
 
 .draw-controls {
@@ -335,6 +347,7 @@ textarea:focus {
   gap: 16px;
 }
 
+/* Confeti - actualizar colores */
 
 .confetti-piece {
   position: fixed;
@@ -355,13 +368,14 @@ textarea:focus {
   }
 }
 
+/* Toast */
 
 .toast {
   position: fixed;
   bottom: 18px;
   right: 18px;
-  background: rgba(15, 23, 42, 0.95);
-  color: #e5e7eb;
+  background: rgba(31, 78, 155, 0.95); /* Pantone 293 U */
+  color: #cce6f6; /* Pantone 7457 U */
   padding: 12px 16px;
   border-radius: 999px;
   font-size: 13px;
@@ -369,7 +383,7 @@ textarea:focus {
   align-items: center;
   gap: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(148, 163, 184, 0.5);
+  border: 1px solid rgba(127, 147, 160, 0.5); /* Pantone 7697 U */
   opacity: 0;
   transform: translateY(12px);
   animation: toastIn 0.3s forwards;
@@ -393,11 +407,13 @@ textarea:focus {
   opacity: 0.7;
 }
 
+/* Overlay de ganador */
 
 .winner-overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(3, 7, 18, 0.98));
+  /* Fondo con Pantone 293 U */
+  background: radial-gradient(circle at top, rgba(31, 78, 155, 0.98), rgba(13, 42, 94, 0.98));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -416,8 +432,10 @@ textarea:focus {
   text-align: center;
   padding: 40px 60px;
   border-radius: 40px;
-  background: radial-gradient(circle at top, rgba(248, 250, 252, 0.06), rgba(15, 23, 42, 0.96));
-  border: 1px solid rgba(248, 250, 252, 0.14);
+  background: radial-gradient(circle at top, 
+    rgba(204, 230, 246, 0.06), /* Pantone 7457 U con opacidad */
+    rgba(31, 78, 155, 0.96)); /* Pantone 293 U con opacidad */
+  border: 1px solid rgba(204, 230, 246, 0.14); /* Pantone 7457 U */
   box-shadow: 0 50px 150px rgba(0, 0, 0, 0.9);
   max-width: 1100px;
 }
@@ -426,9 +444,9 @@ textarea:focus {
   font-size: 40px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #facc15;
+  color: #94bf56; /* Pantone 375 U */
   margin-bottom: 24px;
-  text-shadow: 0 0 18px rgba(250, 204, 21, 0.9);
+  text-shadow: 0 0 18px rgba(148, 191, 86, 0.9); /* Pantone 375 U */
 }
 
 .winner-overlay-name {
@@ -436,12 +454,12 @@ textarea:focus {
   font-weight: 900;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #f9fafb;
+  color: #cce6f6; /* Pantone 7457 U */
   max-width: 80vw;
   margin: 0 auto;
   text-shadow:
-    0 0 22px rgba(15, 23, 42, 1),
-    0 0 45px rgba(249, 115, 22, 0.95);
+    0 0 22px rgba(31, 78, 155, 1), /* Pantone 293 U */
+    0 0 45px rgba(148, 191, 86, 0.95); /* Pantone 375 U */
   transform-origin: center;
 }
 
@@ -470,25 +488,31 @@ textarea:focus {
   align-items: start;
 }
 
+/* Botón Excel */
 .icon-excel {
-  background: linear-gradient(135deg,#10b981,#06b6d4);
-  color: white;
+  background: linear-gradient(135deg, #94bf56, #7f93a0); /* Pantone 375 U a 7697 U */
+  color: #1f4e9b; /* Pantone 293 U */
   border: none;
   padding: 8px 12px;
   border-radius: 10px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 22px rgba(6, 182, 212, 0.12);
+  box-shadow: 0 8px 22px rgba(148, 191, 86, 0.12); /* Pantone 375 U */
 }
-.icon-excel:hover { transform: translateY(-2px); }
+.icon-excel:hover { 
+  transform: translateY(-2px); 
+  background: linear-gradient(135deg, #a8cc78, #8fa1ad); /* Variantes más claras */
+}
 
 .winner-overlay-content {
   position: relative; 
   text-align: center;
   padding: 40px 60px;
   border-radius: 40px;
-  background: radial-gradient(circle at top, rgba(248, 250, 252, 0.06), rgba(15, 23, 42, 0.96));
-  border: 1px solid rgba(248, 250, 252, 0.14);
+  background: radial-gradient(circle at top, 
+    rgba(204, 230, 246, 0.06), /* Pantone 7457 U */
+    rgba(31, 78, 155, 0.96)); /* Pantone 293 U */
+  border: 1px solid rgba(204, 230, 246, 0.14); /* Pantone 7457 U */
   box-shadow: 0 50px 150px rgba(0, 0, 0, 0.9);
   max-width: 1100px;
 }
@@ -497,17 +521,20 @@ textarea:focus {
   position: absolute;
   right: 18px;
   top: 14px;
-  background: rgba(255,255,255,0.06);
-  color: #f8fafc;
+  background: rgba(204, 230, 246, 0.1); /* Pantone 7457 U con opacidad */
+  color: #cce6f6; /* Pantone 7457 U */
   border: none;
   width: 44px;
   height: 44px;
   border-radius: 999px;
   font-size: 20px;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
-.close-winner:hover { transform: scale(1.03); }
+.close-winner:hover { 
+  transform: scale(1.03); 
+  background: rgba(204, 230, 246, 0.2); /* Pantone 7457 U con más opacidad */
+}
 
 .attended-checkbox {
   position: absolute;
@@ -516,29 +543,59 @@ textarea:focus {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(15,23,42,0.55);
+  background: rgba(31, 78, 155, 0.55); /* Pantone 293 U con opacidad */
   padding: 8px 12px;
   border-radius: 999px;
   font-size: 14px;
-  color: #e6e6e6;
-  border: 1px solid rgba(148,163,184,0.12);
+  color: #cce6f6; /* Pantone 7457 U */
+  border: 1px solid rgba(127, 147, 160, 0.12); /* Pantone 7697 U */
 }
 .attended-checkbox input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #10b981;
+  accent-color: #94bf56; /* Pantone 375 U */
 }
 
-.winner-overlay-name { margin: 12px 0 40px; }
+.winner-overlay-name { 
+  margin: 12px 0 40px; 
+}
 
+/* Estilos específicos para nombre y departamento */
 
+.winner-name {
+  font-size: clamp(3.8rem, 7vw, 6rem);
+  margin-bottom: 20px;
+  color: #cce6f6; /* Pantone 7457 U */
+}
+
+.winner-department {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  color: #94bf56; /* Pantone 375 U */
+  text-shadow: 0 0 15px rgba(148, 191, 86, 0.8); /* Pantone 375 U */
+  margin-top: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.winner-name.animate {
+  animation: overlayPop 0.9s cubic-bezier(0.2, 1.4, 0.3, 1) forwards;
+}
+
+/* Ajustar margen para el contenido del overlay */
+.winner-overlay-name {
+  margin: 12px 0 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
 .empty-rulette {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 320px;
-  color: #9ca3af;
+  color: #7f93a0; /* Pantone 7697 U */
   font-size: 18px;
   font-style: italic;
 }
@@ -549,7 +606,7 @@ textarea:focus {
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(3, 7, 18, 0.98));
+  background: radial-gradient(circle at top, rgba(31, 78, 155, 0.98), rgba(13, 42, 94, 0.98));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -569,25 +626,6 @@ textarea:focus {
   cursor: default; 
 }
 
-.winner-overlay-name.animate {
-  animation: overlayPop 0.9s cubic-bezier(0.2, 1.4, 0.3, 1) forwards;
-}
-
-@keyframes overlayPop {
-  0% {
-    transform: scale(0) translateY(30px) rotate(-10deg);
-    opacity: 0;
-  }
-  55% {
-    transform: scale(1.2) translateY(-8px) rotate(3deg);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1) translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-}
-
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -602,3 +640,5 @@ textarea:focus {
 .roulette-item {
   transition: all 0.3s ease;
 }
+
+/* Actualizar colores del confeti en app.js también */

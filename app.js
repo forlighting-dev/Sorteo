@@ -61,22 +61,28 @@ function renderBaseRouletteList() {
     const item = document.createElement('div');
     item.className = 'roulette-item';
     item.dataset.id = p.id.toString();
-    item.textContent = p.name;
+    item.textContent = p.name; // Solo mostrar el nombre en la ruleta
     rouletteListEl.appendChild(item);
   });
   rouletteListEl.style.transition = 'none';
   rouletteListEl.style.transform = 'translateY(0px)';
 }
 
-function openWinnerOverlay(name) {
-  winnerOverlayName.textContent = name;
+function openWinnerOverlay(winnerObj) {
+  // Mostrar nombre y departamento en el overlay
+  winnerOverlayName.innerHTML = `
+    <div class="winner-name">${winnerObj.name}</div>
+    <div class="winner-department">${winnerObj.department || 'Sin departamento'}</div>
+  `;
   winnerOverlay.classList.add('show');
   winnerOverlay.setAttribute('aria-hidden', 'false');
   attendedCheckbox.checked = false;
   
-  winnerOverlayName.classList.remove('animate');
-  void winnerOverlayName.offsetWidth;
-  winnerOverlayName.classList.add('animate');
+  // Remover animación previa y agregar nueva
+  const winnerNameElement = winnerOverlayName.querySelector('.winner-name');
+  winnerNameElement.classList.remove('animate');
+  void winnerNameElement.offsetWidth;
+  winnerNameElement.classList.add('animate');
 }
 
 function closeWinnerOverlay() {
@@ -101,9 +107,13 @@ function downloadWinnersCSV() {
     return;
   }
   const lines = [];
-  lines.push(['Nombre','Asistió','Seleccionado en']);
+  lines.push(['Nombre', 'Departamento', 'Asistio']);
   winnersHistory.forEach(w => {
-    lines.push([`"${w.name.replace(/"/g,'""')}"`, w.attended ? 'Sí' : 'No', w.timestamp]);
+    lines.push([
+      `"${w.name.replace(/"/g,'""')}"`,
+      `"${(w.department || '').replace(/"/g,'""')}"`,
+      w.attended ? 'Si' : 'No'
+    ]);
   });
   const csv = lines.map(row => row.join(',')).join('\r\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -155,14 +165,9 @@ async function selectRandomWinner() {
   const winnerObj = remainingParticipants[randomIndex];
 
   // Calcular vueltas para que dure mínimo 10 segundos
-  // Queremos que haya muchos elementos para una animación larga y emocionante
-  const targetAnimationTime = 10000; // 10 segundos en milisegundos
-  const minItemsPerSecond = 15; // Mínimo de elementos por segundo para que se vea fluido
-  
-  // Calcular el número total de elementos necesarios para 10 segundos
+  const targetAnimationTime = 10000;
+  const minItemsPerSecond = 15;
   const minTotalItems = Math.ceil((targetAnimationTime / 1000) * minItemsPerSecond);
-  
-  // Calcular cuántas vueltas completas necesitamos
   const loops = Math.max(6, Math.ceil(minTotalItems / remainingParticipants.length));
 
   const extendedList = [];
@@ -175,7 +180,7 @@ async function selectRandomWinner() {
     const it = document.createElement('div');
     it.className = 'roulette-item';
     it.dataset.id = p.id.toString();
-    it.textContent = p.name;
+    it.textContent = p.name; // Solo mostrar nombre en la ruleta
     rouletteListEl.appendChild(it);
   });
 
@@ -197,42 +202,29 @@ async function selectRandomWinner() {
   const targetIndex = (loops - 1) * perLoop + baseIndex;
   const finalTranslate = -(targetIndex * rowHeight - highlightOffset);
 
-  // Animación de 10 segundos con desaceleración dramática
-  const spinDurationMs = 10000; // 10 segundos total
-  
-  // Curva de easing especial para mucho drama:
-  // - Empieza rápido (0.1, 0.7)
-  // - Se mantiene rápido por un tiempo
-  // - Desacelera dramáticamente al final (0.1, 1)
-  // cubic-bezier(0.1, 0.7, 0.1, 1) - Muy dramático al final
-  
+  const spinDurationMs = 10000;
   rouletteListEl.style.transition = 'none';
   rouletteListEl.style.transform = 'translateY(0px)';
 
-  // Pequeña pausa antes de iniciar la animación
   await sleep(10);
 
-  // Aplicar la animación con curva dramática
   rouletteListEl.style.transition = `transform ${spinDurationMs}ms cubic-bezier(0.1, 0.7, 0.1, 1)`;
   rouletteListEl.style.transform = `translateY(${finalTranslate}px)`;
 
-  // Esperar a que termine la animación
   await sleep(spinDurationMs + 500);
 
-  // Mostrar ganador
-  openWinnerOverlay(winnerObj.name);
+  openWinnerOverlay(winnerObj);
   await showConfettiBurst();
   setTimeout(showConfettiBurst, 550);
 
-  // Agregar a historial
   winnersHistory.push({
     id: winnerObj.id,
     name: winnerObj.name,
+    department: winnerObj.department,
     timestamp: (new Date()).toLocaleString(),
     attended: false
   });
 
-  // Remover de participantes
   remainingParticipants.splice(randomIndex, 1);
 }
 
@@ -247,7 +239,16 @@ function startDraw() {
     return;
   }
 
-  allParticipants = lines.map((name, index) => ({ id: index + 1, name }));
+  // Procesar cada línea en formato: NOMBRE,DEPARTAMENTO
+  allParticipants = lines.map((line, index) => {
+    const parts = line.split(',').map(part => part.trim());
+    return {
+      id: index + 1,
+      name: parts[0] || 'Sin nombre',
+      department: parts[1] || 'Sin departamento'
+    };
+  });
+
   remainingParticipants = shuffle([...allParticipants]);
   
   updateStatus();

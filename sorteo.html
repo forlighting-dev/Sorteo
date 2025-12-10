@@ -7,7 +7,6 @@
 </head>
 
 <body>
-  
   <div class="app">
     <div id="setupScreen" class="card">
       <div class="setup-top">
@@ -29,16 +28,15 @@
       <div>
         <div class="textarea-label">
           <span>Participantes</span>
-          <small>1 nombre por línea</small>
+          <small>Formato: Nombre,Departamento (uno por línea)</small>
         </div>
-        <textarea id="participants" placeholder="Ej:&#10;Juan Pérez&#10;María López&#10;Carlos Ruiz"></textarea>
+        <textarea id="participants" placeholder="Jesus Rodriguez ,TI&#10;Mario Uex, TI&#10;Josue Garcia,TI"></textarea>
 
         <div class="controls">
           <button id="drawButton" class="button">
             <span class="icon">🎲</span>
             <span>¡Sortear ganadores!</span>
           </button>
-
         </div>
       </div>
     </div>
@@ -84,7 +82,10 @@
 
       <div class="winner-overlay-title">🎉 GANADOR 🎉</div>
 
-      <div id="winnerOverlayName" class="winner-overlay-name">Nombre</div>
+      <div id="winnerOverlayName" class="winner-overlay-name">
+        <div class="winner-name">Nombre</div>
+        <div class="winner-department">Departamento</div>
+      </div>
 
       <label class="attended-checkbox">
         <input type="checkbox" id="attendedCheckbox" />
