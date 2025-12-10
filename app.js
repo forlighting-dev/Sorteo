@@ -116,28 +116,34 @@ function downloadWinnersCSV() {
     showToast('No hay ganadores para exportar.', 'ℹ️');
     return;
   }
-  const lines = [];
-  lines.push(['Nombre', 'Departamento', 'Asistio']);
+
+  // Aquí se separan con punto y coma
+  let lines = ["Nombre;Departamento;Asistio"];
+
   winnersHistory.forEach(w => {
-    lines.push([
-      `"${w.name.replace(/"/g,'""')}"`,
-      `"${(w.department || '').replace(/"/g,'""')}"`,
-      w.attended ? 'Si' : 'No'
-    ]);
+    const name = (w.name || "").replace(/"/g, '""').toUpperCase(); // Mayúsculas
+    const dept = (w.department || "").replace(/"/g, '""').toUpperCase(); // Mayúsculas
+    const attended = w.attended ? "Si" : "No";
+
+    // Aquí se separan con punto y coma
+    lines.push(`"${name}";"${dept}";${attended}`);
   });
-  const csv = lines.map(row => row.join(',')).join('\r\n');
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+  const csv = lines.join("\r\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  const dt = new Date();
-  const stamp = dt.toISOString().slice(0,19).replace('T','_').replace(/:/g,'-');
-  a.download = `ganadores_${stamp}.csv`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+  const link = document.createElement("a");
+  link.href = url;
+  const stamp = new Date().toISOString().replace(/[:T]/g, "-").slice(0, 19);
+  link.download = `ganadores_${stamp}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
   URL.revokeObjectURL(url);
 }
+
+
 
 async function showConfettiBurst() {
   const colors = ['#f97316', '#facc15', '#22c55e', '#38bdf8', '#a855f7', '#ec4899'];
