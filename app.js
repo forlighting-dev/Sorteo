@@ -107,6 +107,7 @@ function downloadWinnersCSV() {
     return;
   }
   const lines = [];
+  // Encabezados con las nuevas columnas
   lines.push(['Nombre', 'Departamento', 'Asistio']);
   winnersHistory.forEach(w => {
     lines.push([

@@ -40,19 +40,24 @@ body {
 /* Encabezados y badges */
 
 .title {
-  font-size: 34px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  font-size: 48px; /* Aumentado de 34px a 48px */
+  font-weight: 800; /* Más grueso */
+  letter-spacing: 0.05em; /* Un poco más de espacio entre letras */
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  justify-content: center; /* Centrado horizontal */
+  gap: 15px; /* Más espacio entre el emoji y el texto */
+  margin-bottom: 8px;
   color: #cce6f6; /* Pantone 7457 U */
+  text-align: center;
+  width: 100%;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Sombra para mejor legibilidad */
 }
 
 .title span.emoji {
-  font-size: 38px;
-  filter: drop-shadow(0 0 10px rgba(148, 191, 86, 0.8)); /* Pantone 375 U */
+  font-size: 52px; /* Aumentado de 38px a 52px */
+  filter: drop-shadow(0 0 12px rgba(148, 191, 86, 0.9)); /* Pantone 375 U - sombra más pronunciada */
+  animation: float 3s ease-in-out infinite; /* Animación de flotación */
 }
 
 .badge {
@@ -595,7 +600,7 @@ textarea:focus {
   align-items: center;
   justify-content: center;
   height: 320px;
-  color: #7f93a0; /* Pantone 7697 U */
+  color: #7f93a0; 
   font-size: 18px;
   font-style: italic;
 }
@@ -641,4 +646,102 @@ textarea:focus {
   transition: all 0.3s ease;
 }
 
-/* Actualizar colores del confeti en app.js también */
+/* Logo en la parte superior */
+.logo-container {
+  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto 40px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.15); /* Fondo blanco con 15% de opacidad */
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Borde blanco sutil */
+  backdrop-filter: blur(5px); /* Efecto de desenfoque para fondo */
+}
+
+.main-logo {
+  width: 100%;
+  max-width: 982.8px; /* 26cm a píxeles (26 * 37.8) */
+  height: auto;
+  max-height: 159.894px; /* 4.23cm a píxeles (4.23 * 37.8) */
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3)); /* Sombra para mejorar contraste */
+}
+
+/* Ajustar el contenedor principal para el logo */
+.app {
+  width: 100%;
+  max-width: 1300px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Asegurar que el card se mantenga debajo del logo */
+.card {
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* Efecto hover sutil para el logo */
+.logo-container:hover {
+  background-color: rgba(255, 255, 255, 0.2); /* Un poco más de opacidad al pasar el mouse */
+  transition: background-color 0.3s ease;
+}
+
+/* Responsive para pantallas más pequeñas */
+@media (max-width: 1200px) {
+  .main-logo {
+    max-width: 800px;
+    max-height: 130px;
+  }
+  
+  .logo-container {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo-container {
+    margin-bottom: 20px;
+    padding: 12px;
+  }
+  
+  .main-logo {
+    max-width: 600px;
+    max-height: 98px; /* Mantiene la proporción 26:4.23 */
+  }
+  
+  .app {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-logo {
+    max-width: 400px;
+    max-height: 65px;
+  }
+  
+  .logo-container {
+    padding: 10px;
+    border-radius: 8px;
+  }
+}
+
+/* Para pantallas muy grandes (4K) */
+@media (min-width: 2000px) {
+  .logo-container {
+    max-width: 1600px;
+    padding: 30px;
+  }
+  
+  .main-logo {
+    max-width: 1200px;
+    max-height: 195px;
+  }
+}
