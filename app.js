@@ -271,13 +271,22 @@ function startDraw() {
   }
 
   allParticipants = lines.map((line, index) => {
-    const parts = line.split(',').map(part => part.trim());
-    return {
-      id: index + 1,
-      name: parts[0] || 'Sin nombre',
-      department: parts[1] || 'Sin departamento'
-    };
-  });
+  const parts = line.split(',').map(part => part.trim());
+  const name = parts[0] || "";
+  const dept = parts[1] || "";
+  // VALIDACIÓN: nombre o depto vacíos
+  if (name === "" || dept === "") {
+    showToast("Cada participante debe tener NOMBRE y DEPARTAMENTO.", "⚠️");
+    throw new Error("Datos inválidos en participantes");
+  }
+
+  return {
+    id: index + 1,
+    name,
+    department: dept
+  };
+});
+
 
   remainingParticipants = shuffle([...allParticipants]);
   
