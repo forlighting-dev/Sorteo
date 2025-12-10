@@ -126,33 +126,88 @@ function closeWinnerOverlay() {
   selectWinnerButton.disabled = false;
 }
 
-function downloadWinnersCSV() {
+function downloadWinnersExcel() {
   if (winnersHistory.length === 0) {
     showToast('No hay ganadores para exportar.', 'ℹ️');
     return;
   }
 
-  let lines = ["Nombre;Departamento;Asistio"];
+  try {
+    // Crear una nueva hoja de cálculo
+    const workbook = XLSX.utils.book_new();
+    
+    // Crear los datos para la hoja
+    const data = [
+      ["Nombre", "Departamento", "Asistió"], // Encabezados
+      ...winnersHistory.map(winner => [
+        winner.name || "",
+        winner.department || "",
+        winner.attended ? "Sí" : "No"
+      ])
+    ];
+    
+    // Convertir los datos a una hoja de trabajo
+    const worksheet = XLSX.utils.aoa_to_sheet(data);
+    
+    // Establecer propiedades de la hoja
+    worksheet["!cols"] = [
+      { wch: 30 }, // Ancho columna Nombre
+      { wch: 25 }, // Ancho columna Departamento
+      { wch: 15 }  // Ancho columna Asistió
+    ];
+    
+    // Agregar la hoja al libro de trabajo
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Ganadores");
+    
+    // Generar el archivo Excel
+    const stamp = new Date().toISOString()
+      .replace(/:/g, '-')
+      .replace('T', '_')
+      .slice(0, 19);
+    
+    const fileName = `ganadores_${stamp}.xlsx`;
+    
+    // Descargar el archivo
+    XLSX.writeFile(workbook, fileName);
+    
+    showToast('Archivo Excel generado exitosamente', '📊');
+    
+  } catch (error) {
+    console.error("Error al generar el archivo Excel:", error);
+    showToast('Error al generar el archivo Excel', '❌');
+    
+    // Fallback a CSV si falla Excel
+    showToast('Intentando generar archivo CSV como alternativa...', '⚠️');
+    downloadWinnersCSV();
+  }
+}
 
-  winnersHistory.forEach(w => {
-    const name = (w.name || "").replace(/"/g, '""').toUpperCase(); 
-    const dept = (w.department || "").replace(/"/g, '""').toUpperCase(); 
-    const attended = w.attended ? "Si" : "No";
-
-    lines.push(`"${name}";"${dept}";${attended}`);
-  });
-
-  const csv = lines.join("\r\n");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+// Función alternativa CSV (por si acaso)
+function downloadWinnersCSV() {
+  if (winnersHistory.length === 0) return;
+  
+  const csvData = [
+    ['Nombre', 'Departamento', 'Asistió'],
+    ...winnersHistory.map(w => [
+      w.name || '',
+      w.department || '',
+      w.attended ? 'Sí' : 'No'
+    ])
+  ];
+  
+  const csvContent = csvData.map(row => 
+    row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(',')
+  ).join('\r\n');
+  
+  const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = url;
-  const stamp = new Date().toISOString().replace(/[:T]/g, "-").slice(0, 19);
+  const stamp = new Date().toISOString().slice(0,19).replace('T','_').replace(/:/g,'-');
   link.download = `ganadores_${stamp}.csv`;
   document.body.appendChild(link);
   link.click();
   link.remove();
-
   URL.revokeObjectURL(url);
 }
 
@@ -271,22 +326,20 @@ function startDraw() {
   }
 
   allParticipants = lines.map((line, index) => {
-  const parts = line.split(',').map(part => part.trim());
-  const name = parts[0] || "";
-  const dept = parts[1] || "";
-  // VALIDACIÓN: nombre o depto vacíos
-  if (name === "" || dept === "") {
-    showToast("Cada participante debe tener NOMBRE y DEPARTAMENTO.", "⚠️");
-    throw new Error("Datos inválidos en participantes");
-  }
+    const parts = line.split(',').map(part => part.trim());
+    const name = parts[0] || "";
+    const dept = parts[1] || "";
+    if (name === "" || dept === "") {
+      showToast("Cada participante debe tener NOMBRE y DEPARTAMENTO.", "⚠️");
+      throw new Error("Datos inválidos en participantes");
+    }
 
-  return {
-    id: index + 1,
-    name,
-    department: dept
-  };
-});
-
+    return {
+      id: index + 1,
+      name,
+      department: dept
+    };
+  });
 
   remainingParticipants = shuffle([...allParticipants]);
   
@@ -353,8 +406,9 @@ closeWinnerBtn.addEventListener('click', () => {
   closeWinnerOverlay();
 });
 
+// Cambiar a la nueva función de Excel
 downloadExcelBtn.addEventListener('click', () => {
-  downloadWinnersCSV();
+  downloadWinnersExcel();
 });
 
 updateStatus();
