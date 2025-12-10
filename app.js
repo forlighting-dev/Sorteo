@@ -22,6 +22,7 @@ let allParticipants = [];
 let remainingParticipants = [];
 let winnersHistory = [];
 let isSelecting = false;
+let currentWinner = null;
 
 function showToast(message, icon = "⚠️") {
   const toast = document.createElement('div');
@@ -69,6 +70,7 @@ function renderBaseRouletteList() {
 }
 
 function openWinnerOverlay(winnerObj) {
+  currentWinner = winnerObj;
   winnerOverlayName.innerHTML = `
     <div class="winner-name">${winnerObj.name}</div>
     <div class="winner-department">${winnerObj.department || 'Sin departamento'}</div>
@@ -87,10 +89,20 @@ function closeWinnerOverlay() {
   winnerOverlay.classList.remove('show');
   winnerOverlay.setAttribute('aria-hidden', 'true');
   
-  const lastWinner = winnersHistory[winnersHistory.length - 1];
-  if (lastWinner) {
-    lastWinner.attended = attendedCheckbox.checked;
+  if (currentWinner && attendedCheckbox.checked) {
+    winnersHistory.push({
+      id: currentWinner.id,
+      name: currentWinner.name,
+      department: currentWinner.department,
+      timestamp: (new Date()).toLocaleString(),
+      attended: true
+    });
+    
+    showToast(`${currentWinner.name} guardado como asistente`, "✅");
   }
+  
+  currentWinner = null; 
+  attendedCheckbox.checked = false; 
   
   renderBaseRouletteList();
   updateStatus();
@@ -214,18 +226,14 @@ async function selectRandomWinner() {
   await showConfettiBurst();
   setTimeout(showConfettiBurst, 550);
 
-  winnersHistory.push({
-    id: winnerObj.id,
-    name: winnerObj.name,
-    department: winnerObj.department,
-    timestamp: (new Date()).toLocaleString(),
-    attended: false
-  });
-
+  
   remainingParticipants.splice(randomIndex, 1);
 }
 
 function startDraw() {
+  winnersHistory = [];
+  showToast('Listado de ganadores reiniciado', '🔄');
+  
   const lines = participantsTextarea.value
     .split('\n')
     .map(l => l.trim())
@@ -262,6 +270,10 @@ function resetToSetup() {
   remainingParticipants = [];
   isSelecting = false;
   rouletteListEl.innerHTML = '';
+  currentWinner = null;
+  attendedCheckbox.checked = false;
+  
+  
   updateStatus();
   drawScreen.classList.add('hidden');
   setupScreen.classList.remove('hidden');
@@ -292,20 +304,14 @@ backButton.addEventListener('click', () => {
 });
 
 attendedCheckbox.addEventListener('change', (e) => {
-  const lastWinner = winnersHistory[winnersHistory.length - 1];
-  if (lastWinner) {
-    lastWinner.attended = e.target.checked;
-    updateStatus();
+  if (currentWinner) {
+    const status = e.target.checked ? 'marcado' : 'desmarcado';
   }
 });
 
-// SOLO el botón de cerrar puede cerrar el modal
 closeWinnerBtn.addEventListener('click', () => {
   closeWinnerOverlay();
 });
-
-// Se han ELIMINADO los eventos que cerraban el modal con Escape o clic fuera
-// para evitar cierres accidentales
 
 downloadExcelBtn.addEventListener('click', () => {
   downloadWinnersCSV();
