@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sorteo de premios</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+
+<body>
+  <div class="app">
+    <div class="card">
+      <div>
+        <div class="badge">
+          <div class="badge-dot"></div>
+          Sorteo en vivo
+        </div>
+        <h1 class="title">
+          <span class="emoji">🎰</span>
+          Sorteo de premios
+        </h1>
+
+        <div class="textarea-label">
+          <span>Participantes</span>
+        </div>
+        <textarea id="participants" ></textarea>
+
+        <div class="controls">
+          <button id="drawButton" class="button">
+            <span class="icon">🎲</span>
+            <span>¡Sortear ganadores!</span>
+          </button>
+
+          <label class="winner-config" title="Cuántos ganadores quieres que se elijan">
+            Ganadores:
+            <input type="number" id="winnerCountInput" value="10" min="1" max="1000" />
+          </label>
+
+        </div>
+      </div>
+
+      <div class="winner-panel">
+        <div class="winner-header">
+          <div>
+            <div class="winner-title">Ganadores</div>
+            <div class="winner-count" id="winnerCountLabel">0 / 0 mostrados</div>
+          </div>
+          <div class="live-indicator" id="liveIndicator">
+            <span class="live-dot"></span>
+            <span id="liveText">Listo para comenzar</span>
+          </div>
+        </div>
+
+        <div class="current-winner-box">
+          <div id="currentWinner" class="current-winner-name">
+            Esperando sorteo…
+          </div>
+        </div>
+
+        <div class="winner-list" id="winnerList"></div>
+      </div>
+    </div>
+  </div>
+
+
+<div id="winnerOverlay" class="winner-overlay">
+    <div class="winner-overlay-content">
+      <div class="winner-overlay-title">🎉 GANADOR 🎉</div>
+      <div id="winnerOverlayName" class="winner-overlay-name">Nombre</div>
+    </div>
+  </div>
+
+<script src="app.js"></script>
+</body>
+</html>
