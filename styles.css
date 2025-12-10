@@ -11,9 +11,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Fondo con Pantone 293 U (#1f4e9b) */
   background: radial-gradient(circle at top, #1f4e9b, #0d2a5e);
-  color: #cce6f6; /* Pantone 7457 U para texto */
+  color: #cce6f6;
   overflow: hidden;
 }
 
@@ -24,12 +23,11 @@ body {
 }
 
 .card {
-  /* Fondo con Pantone 293 U con opacidad */
   background: rgba(31, 78, 155, 0.95);
   border-radius: 28px;
   padding: 32px 34px 40px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(127, 147, 160, 0.25); /* Pantone 7697 U */
+  border: 1px solid rgba(127, 147, 160, 0.25);
   backdrop-filter: blur(18px);
 }
 
@@ -37,39 +35,47 @@ body {
   display: none;
 }
 
-/* Encabezados y badges */
-
 .title {
-  font-size: 48px; /* Aumentado de 34px a 48px */
-  font-weight: 800; /* Más grueso */
-  letter-spacing: 0.05em; /* Un poco más de espacio entre letras */
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centrado horizontal */
-  gap: 15px; /* Más espacio entre el emoji y el texto */
+  justify-content: center;
+  gap: 15px;
   margin-bottom: 8px;
-  color: #cce6f6; /* Pantone 7457 U */
+  color: #cce6f6;
   text-align: center;
   width: 100%;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Sombra para mejor legibilidad */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .title span.emoji {
-  font-size: 52px; /* Aumentado de 38px a 52px */
-  filter: drop-shadow(0 0 12px rgba(148, 191, 86, 0.9)); /* Pantone 375 U - sombra más pronunciada */
-  animation: float 3s ease-in-out infinite; /* Animación de flotación */
+  animation: float 3.5s ease-in-out infinite, shimmer 2s ease-in-out infinite;
+}
+.title:hover span.emoji {
+  animation-duration: 2s;
+  filter: drop-shadow(0 0 25px rgba(204, 230, 246, 0.95));
+}
+@keyframes shimmer {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.9;
+  }
 }
 
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #94bf56; /* Pantone 375 U */
-  background: rgba(204, 230, 246, 0.1); /* Pantone 7457 U con opacidad */
+  color: #94bf56;
+  background: rgba(204, 230, 246, 0.1);
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 13px;
-  border: 1px solid rgba(148, 191, 86, 0.5); /* Pantone 375 U */
+  border: 1px solid rgba(148, 191, 86, 0.5);
   margin-bottom: 10px;
 }
 
@@ -77,8 +83,8 @@ body {
   width: 10px;
   height: 10px;
   border-radius: 999px;
-  background: radial-gradient(circle, #94bf56, #b8d98d); /* Pantone 375 U y variante */
-  box-shadow: 0 0 10px rgba(148, 191, 86, 0.9); /* Pantone 375 U */
+  background: radial-gradient(circle, #94bf56, #b8d98d);
+  box-shadow: 0 0 10px rgba(148, 191, 86, 0.9);
   animation: pulse 1.3s infinite alternate;
 }
 
@@ -89,12 +95,11 @@ body {
   }
 }
 
-/* Textarea y controles iniciales */
 
 .textarea-label {
   font-size: 16px;
   margin-bottom: 8px;
-  color: #cce6f6; /* Pantone 7457 U */
+  color: #cce6f6;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -102,7 +107,7 @@ body {
 
 .textarea-label small {
   font-size: 13px;
-  color: #7f93a0; /* Pantone 7697 U */
+  color: #7f93a0;
 }
 
 textarea {
@@ -110,9 +115,9 @@ textarea {
   min-height: 320px;
   resize: vertical;
   border-radius: 18px;
-  border: 1px solid rgba(127, 147, 160, 0.6); /* Pantone 7697 U */
-  background: rgba(31, 78, 155, 0.9); /* Pantone 293 U con opacidad */
-  color: #cce6f6; /* Pantone 7457 U */
+  border: 1px solid rgba(127, 147, 160, 0.6);
+  background: rgba(31, 78, 155, 0.9);
+  color: #cce6f6;
   padding: 18px 18px 18px 20px;
   font-size: 16px;
   line-height: 1.5;
@@ -121,8 +126,8 @@ textarea {
 }
 
 textarea:focus {
-  border-color: #94bf56; /* Pantone 375 U */
-  box-shadow: 0 0 0 1px rgba(148, 191, 86, 0.6); /* Pantone 375 U */
+  border-color: #94bf56;
+  box-shadow: 0 0 0 1px rgba(148, 191, 86, 0.6);
   transform: translateY(-1px);
 }
 
@@ -134,8 +139,6 @@ textarea:focus {
   gap: 16px;
 }
 
-/* Botones */
-
 .button {
   position: relative;
   overflow: hidden;
@@ -146,30 +149,31 @@ textarea:focus {
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  /* Gradiente con Pantone 375 U y variante más clara */
   background: linear-gradient(135deg, #94bf56, #b8d98d);
-  color: #1f4e9b; /* Pantone 293 U para texto en botones */
+  color: #1f4e9b; 
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 22px 50px rgba(148, 191, 86, 0.45); /* Pantone 375 U */
+  box-shadow: 0 22px 50px rgba(148, 191, 86, 0.45);
   transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s;
 }
 
 .button span.icon {
   font-size: 22px;
+  display: inline-block;
+  animation: diceRoll 2s linear infinite; /* Esto hará que gire continuamente */
 }
 
 .button:hover:not(:disabled) {
   transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 26px 60px rgba(148, 191, 86, 0.55); /* Pantone 375 U */
+  box-shadow: 0 26px 60px rgba(148, 191, 86, 0.55);
   filter: brightness(1.05);
 }
 
 .button:active:not(:disabled) {
   transform: translateY(1px) scale(0.99);
-  box-shadow: 0 12px 30px rgba(148, 191, 86, 0.4); /* Pantone 375 U */
+  box-shadow: 0 12px 30px rgba(148, 191, 86, 0.4);
 }
 
 .button:disabled {
@@ -181,9 +185,9 @@ textarea:focus {
 .icon-button {
   background: transparent;
   border-radius: 999px;
-  border: 1px solid rgba(127, 147, 160, 0.6); /* Pantone 7697 U */
+  border: 1px solid rgba(127, 147, 160, 0.6);
   padding: 6px 14px;
-  color: #cce6f6; /* Pantone 7457 U */
+  color: #cce6f6;
   cursor: pointer;
   font-size: 14px;
   display: inline-flex;
@@ -192,21 +196,19 @@ textarea:focus {
 }
 
 .icon-button:hover {
-  background: rgba(31, 78, 155, 0.9); /* Pantone 293 U con opacidad */
+  background: rgba(31, 78, 155, 0.9);
 }
-
-/* Selector de ganadores (si se usa) */
 
 .winner-config {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #cce6f6; /* Pantone 7457 U */
-  background: rgba(31, 78, 155, 0.8); /* Pantone 293 U con opacidad */
+  color: #cce6f6;
+  background: rgba(31, 78, 155, 0.8);
   padding: 8px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(127, 147, 160, 0.6); /* Pantone 7697 U */
+  border: 1px solid rgba(127, 147, 160, 0.6);
 }
 
 .winner-config input {
@@ -216,21 +218,20 @@ textarea:focus {
   padding: 6px 10px;
   font-size: 14px;
   text-align: center;
-  background: rgba(31, 78, 155, 1); /* Pantone 293 U */
-  color: #cce6f6; /* Pantone 7457 U */
+  background: rgba(31, 78, 155, 1);
+  color: #cce6f6;
   outline: none;
 }
 
 .winner-config input:focus {
-  box-shadow: 0 0 0 1px rgba(148, 191, 86, 0.8); /* Pantone 375 U */
+  box-shadow: 0 0 0 1px rgba(148, 191, 86, 0.8);
 }
 
 .helper-text {
   font-size: 13px;
-  color: #7f93a0; /* Pantone 7697 U */
+  color: #7f93a0; 
 }
 
-/* Pantalla 2: Ruleta */
 
 .draw-header {
   display: flex;
@@ -246,12 +247,12 @@ textarea:focus {
 .draw-title {
   font-size: 20px;
   font-weight: 600;
-  color: #cce6f6; /* Pantone 7457 U */
+  color: #cce6f6;
 }
 
 .draw-subtitle {
   font-size: 14px;
-  color: #7f93a0; /* Pantone 7697 U */
+  color: #7f93a0;
   margin-top: 4px;
 }
 
@@ -262,17 +263,17 @@ textarea:focus {
 .roulette-title {
   font-size: 16px;
   margin-bottom: 8px;
-  color: #cce6f6; /* Pantone 7457 U */
+  color: #cce6f6;
 }
 
 .roulette-container {
   position: relative;
   border-radius: 26px;
-  border: 2px solid rgba(127, 147, 160, 0.7); /* Pantone 7697 U */
+  border: 2px solid rgba(127, 147, 160, 0.7);
   background: linear-gradient(to bottom, 
     rgba(31, 78, 155, 0.95), 
-    rgba(31, 78, 155, 0.99)); /* Pantone 293 U */
-  box-shadow: inset 0 0 20px rgba(31, 78, 155, 1); /* Pantone 293 U */
+    rgba(31, 78, 155, 0.99));
+  box-shadow: inset 0 0 20px rgba(31, 78, 155, 1);
   padding: 12px 40px;
 }
 
@@ -299,12 +300,12 @@ textarea:focus {
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #7f93a0; /* Pantone 7697 U */
-  opacity: 0.7;
+  color: #ffffff;
+  opacity: 0.9;
   padding: 0 16px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
 }
 
-/* Banda central con flechas */
 
 .roulette-highlight {
   pointer-events: none;
@@ -314,12 +315,12 @@ textarea:focus {
   top: 50%;
   height: 64px;
   transform: translateY(-50%);
-  background: rgba(148, 191, 86, 0.12); /* Pantone 375 U con opacidad */
-  border-top: 2px solid rgba(148, 191, 86, 0.9); /* Pantone 375 U */
-  border-bottom: 2px solid rgba(148, 191, 86, 0.9); /* Pantone 375 U */
+  background: rgba(148, 191, 86, 0.12);
+  border-top: 2px solid rgba(148, 191, 86, 0.9); 
+  border-bottom: 2px solid rgba(148, 191, 86, 0.9);
   box-shadow:
-    0 0 20px rgba(148, 191, 86, 0.6), /* Pantone 375 U */
-    inset 0 0 12px rgba(31, 78, 155, 0.9); /* Pantone 293 U */
+    0 0 20px rgba(148, 191, 86, 0.6),
+    inset 0 0 12px rgba(31, 78, 155, 0.9); 
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -334,15 +335,15 @@ textarea:focus {
 }
 
 .roulette-arrow.left {
-  border-right: 26px solid #94bf56; /* Pantone 375 U */
+  border-right: 26px solid #94bf56;
   margin-left: -26px;
-  filter: drop-shadow(0 0 6px rgba(148, 191, 86, 0.9)); /* Pantone 375 U */
+  filter: drop-shadow(0 0 6px rgba(148, 191, 86, 0.9)); 
 }
 
 .roulette-arrow.right {
-  border-left: 26px solid #94bf56; /* Pantone 375 U */
+  border-left: 26px solid #94bf56; 
   margin-right: -26px;
-  filter: drop-shadow(0 0 6px rgba(148, 191, 86, 0.9)); /* Pantone 375 U */
+  filter: drop-shadow(0 0 6px rgba(148, 191, 86, 0.9)); 
 }
 
 .draw-controls {
@@ -351,8 +352,6 @@ textarea:focus {
   align-items: center;
   gap: 16px;
 }
-
-/* Confeti - actualizar colores */
 
 .confetti-piece {
   position: fixed;
@@ -373,14 +372,12 @@ textarea:focus {
   }
 }
 
-/* Toast */
-
 .toast {
   position: fixed;
   bottom: 18px;
   right: 18px;
-  background: rgba(31, 78, 155, 0.95); /* Pantone 293 U */
-  color: #cce6f6; /* Pantone 7457 U */
+  background: rgba(31, 78, 155, 0.95); 
+  color: #cce6f6;
   padding: 12px 16px;
   border-radius: 999px;
   font-size: 13px;
@@ -388,7 +385,7 @@ textarea:focus {
   align-items: center;
   gap: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-  border: 1px solid rgba(127, 147, 160, 0.5); /* Pantone 7697 U */
+  border: 1px solid rgba(127, 147, 160, 0.5);
   opacity: 0;
   transform: translateY(12px);
   animation: toastIn 0.3s forwards;
@@ -412,12 +409,10 @@ textarea:focus {
   opacity: 0.7;
 }
 
-/* Overlay de ganador */
 
 .winner-overlay {
   position: fixed;
   inset: 0;
-  /* Fondo con Pantone 293 U */
   background: radial-gradient(circle at top, rgba(31, 78, 155, 0.98), rgba(13, 42, 94, 0.98));
   display: flex;
   align-items: center;
@@ -438,9 +433,9 @@ textarea:focus {
   padding: 40px 60px;
   border-radius: 40px;
   background: radial-gradient(circle at top, 
-    rgba(204, 230, 246, 0.06), /* Pantone 7457 U con opacidad */
-    rgba(31, 78, 155, 0.96)); /* Pantone 293 U con opacidad */
-  border: 1px solid rgba(204, 230, 246, 0.14); /* Pantone 7457 U */
+    rgba(204, 230, 246, 0.06), 
+    rgba(31, 78, 155, 0.96)); 
+  border: 1px solid rgba(204, 230, 246, 0.14); 
   box-shadow: 0 50px 150px rgba(0, 0, 0, 0.9);
   max-width: 1100px;
 }
@@ -449,9 +444,9 @@ textarea:focus {
   font-size: 40px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #94bf56; /* Pantone 375 U */
+  color: #94bf56;
   margin-bottom: 24px;
-  text-shadow: 0 0 18px rgba(148, 191, 86, 0.9); /* Pantone 375 U */
+  text-shadow: 0 0 18px rgba(148, 191, 86, 0.9); 
 }
 
 .winner-overlay-name {
@@ -459,12 +454,12 @@ textarea:focus {
   font-weight: 900;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #cce6f6; /* Pantone 7457 U */
+  color: #cce6f6; 
   max-width: 80vw;
   margin: 0 auto;
   text-shadow:
-    0 0 22px rgba(31, 78, 155, 1), /* Pantone 293 U */
-    0 0 45px rgba(148, 191, 86, 0.95); /* Pantone 375 U */
+    0 0 22px rgba(31, 78, 155, 1),
+    0 0 45px rgba(148, 191, 86, 0.95); 
   transform-origin: center;
 }
 
@@ -493,20 +488,19 @@ textarea:focus {
   align-items: start;
 }
 
-/* Botón Excel */
 .icon-excel {
-  background: linear-gradient(135deg, #94bf56, #7f93a0); /* Pantone 375 U a 7697 U */
-  color: #1f4e9b; /* Pantone 293 U */
+  background: linear-gradient(135deg, #94bf56, #7f93a0); 
+  color: #1f4e9b; 
   border: none;
   padding: 8px 12px;
   border-radius: 10px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 22px rgba(148, 191, 86, 0.12); /* Pantone 375 U */
+  box-shadow: 0 8px 22px rgba(148, 191, 86, 0.12);
 }
 .icon-excel:hover { 
   transform: translateY(-2px); 
-  background: linear-gradient(135deg, #a8cc78, #8fa1ad); /* Variantes más claras */
+  background: linear-gradient(135deg, #a8cc78, #8fa1ad); 
 }
 
 .winner-overlay-content {
@@ -515,9 +509,9 @@ textarea:focus {
   padding: 40px 60px;
   border-radius: 40px;
   background: radial-gradient(circle at top, 
-    rgba(204, 230, 246, 0.06), /* Pantone 7457 U */
-    rgba(31, 78, 155, 0.96)); /* Pantone 293 U */
-  border: 1px solid rgba(204, 230, 246, 0.14); /* Pantone 7457 U */
+    rgba(204, 230, 246, 0.06), 
+    rgba(31, 78, 155, 0.96));
+  border: 1px solid rgba(204, 230, 246, 0.14); 
   box-shadow: 0 50px 150px rgba(0, 0, 0, 0.9);
   max-width: 1100px;
 }
@@ -526,8 +520,8 @@ textarea:focus {
   position: absolute;
   right: 18px;
   top: 14px;
-  background: rgba(204, 230, 246, 0.1); /* Pantone 7457 U con opacidad */
-  color: #cce6f6; /* Pantone 7457 U */
+  background: rgba(204, 230, 246, 0.1); 
+  color: #cce6f6;
   border: none;
   width: 44px;
   height: 44px;
@@ -538,7 +532,7 @@ textarea:focus {
 }
 .close-winner:hover { 
   transform: scale(1.03); 
-  background: rgba(204, 230, 246, 0.2); /* Pantone 7457 U con más opacidad */
+  background: rgba(204, 230, 246, 0.2);
 }
 
 .attended-checkbox {
@@ -548,35 +542,34 @@ textarea:focus {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(31, 78, 155, 0.55); /* Pantone 293 U con opacidad */
+  background: rgba(31, 78, 155, 0.55);
   padding: 8px 12px;
   border-radius: 999px;
   font-size: 14px;
-  color: #cce6f6; /* Pantone 7457 U */
-  border: 1px solid rgba(127, 147, 160, 0.12); /* Pantone 7697 U */
+  color: #cce6f6; 
+  border: 1px solid rgba(127, 147, 160, 0.12); 
 }
 .attended-checkbox input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #94bf56; /* Pantone 375 U */
+  accent-color: #94bf56; 
 }
 
 .winner-overlay-name { 
   margin: 12px 0 40px; 
 }
 
-/* Estilos específicos para nombre y departamento */
 
 .winner-name {
   font-size: clamp(3.8rem, 7vw, 6rem);
   margin-bottom: 20px;
-  color: #cce6f6; /* Pantone 7457 U */
+  color: #cce6f6;
 }
 
 .winner-department {
   font-size: clamp(1.5rem, 3vw, 2.5rem);
-  color: #94bf56; /* Pantone 375 U */
-  text-shadow: 0 0 15px rgba(148, 191, 86, 0.8); /* Pantone 375 U */
+  color: #94bf56; 
+  text-shadow: 0 0 15px rgba(148, 191, 86, 0.8);
   margin-top: 10px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -586,7 +579,6 @@ textarea:focus {
   animation: overlayPop 0.9s cubic-bezier(0.2, 1.4, 0.3, 1) forwards;
 }
 
-/* Ajustar margen para el contenido del overlay */
 .winner-overlay-name {
   margin: 12px 0 40px;
   display: flex;
@@ -600,9 +592,10 @@ textarea:focus {
   align-items: center;
   justify-content: center;
   height: 320px;
-  color: #7f93a0; 
+  color: #ffffff; 
   font-size: 18px;
   font-style: italic;
+  opacity: 0.8;
 }
 
 .winner-overlay {
@@ -641,12 +634,16 @@ textarea:focus {
 .roulette-list {
   transition-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
 }
-
+.roulette-item.highlighted {
+  opacity: 1;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+}
 .roulette-item {
-  transition: all 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Logo en la parte superior */
 .logo-container {
   width: 100%;
   max-width: 1300px;
@@ -655,23 +652,27 @@ textarea:focus {
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background-color: rgba(255, 255, 255, 0.15); /* Fondo blanco con 15% de opacidad */
+  background-color: rgba(255, 255, 255, 0.5); 
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Borde blanco sutil */
-  backdrop-filter: blur(5px); /* Efecto de desenfoque para fondo */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); 
+  border: 1px solid rgba(255, 255, 255, 0.8); 
+  backdrop-filter: blur(8px);
+}
+.logo-container:hover {
+  background-color: rgba(255, 255, 255, 0.75); 
+  transition: background-color 0.3s ease;
 }
 
 .main-logo {
   width: 100%;
-  max-width: 982.8px; /* 26cm a píxeles (26 * 37.8) */
+  max-width: 982.8px;
   height: auto;
-  max-height: 159.894px; /* 4.23cm a píxeles (4.23 * 37.8) */
+  max-height: 159.894px;
   object-fit: contain;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3)); /* Sombra para mejorar contraste */
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4)); 
+  padding: 5px; 
 }
 
-/* Ajustar el contenedor principal para el logo */
 .app {
   width: 100%;
   max-width: 1300px;
@@ -681,19 +682,16 @@ textarea:focus {
   align-items: center;
 }
 
-/* Asegurar que el card se mantenga debajo del logo */
 .card {
   margin-top: 20px;
   width: 100%;
 }
 
-/* Efecto hover sutil para el logo */
 .logo-container:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Un poco más de opacidad al pasar el mouse */
+  background-color: rgba(255, 255, 255, 0.2);
   transition: background-color 0.3s ease;
 }
 
-/* Responsive para pantallas más pequeñas */
 @media (max-width: 1200px) {
   .main-logo {
     max-width: 800px;
@@ -713,7 +711,7 @@ textarea:focus {
   
   .main-logo {
     max-width: 600px;
-    max-height: 98px; /* Mantiene la proporción 26:4.23 */
+    max-height: 98px;
   }
   
   .app {
@@ -733,7 +731,6 @@ textarea:focus {
   }
 }
 
-/* Para pantallas muy grandes (4K) */
 @media (min-width: 2000px) {
   .logo-container {
     max-width: 1600px;
@@ -744,4 +741,174 @@ textarea:focus {
     max-width: 1200px;
     max-height: 195px;
   }
+}
+
+#drawScreen:not(.hidden) ~ .logo-container,
+.draw-screen-active .logo-container {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#setupScreen:not(.hidden) ~ .logo-container,
+.setup-screen-active .logo-container {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  height: auto;
+  margin: 0 auto 40px auto;
+  padding: 20px;
+}
+
+#drawScreen:not(.hidden) {
+  margin-top: 0;
+  transform: scale(1.02);
+  transition: transform 0.3s ease, margin-top 0.3s ease;
+  min-height: 85vh;
+}
+
+body.draw-screen-active #drawScreen {
+  margin-top: 0;
+  transform: scale(1.02);
+  transition: transform 0.3s ease, margin-top 0.3s ease;
+  min-height: 85vh;
+}
+
+body.setup-screen-active #setupScreen {
+  margin-top: 20px;
+}
+
+@keyframes drawScreenEnter {
+  from {
+    opacity: 0.9;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1.02);
+  }
+}
+
+#drawScreen:not(.hidden) {
+  animation: drawScreenEnter 0.4s ease-out;
+}
+
+.logo-container {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#drawScreen:not(.hidden) #backButton {
+  padding: 8px 16px;
+  font-size: 15px;
+  background: rgba(204, 230, 246, 0.1);
+  border: 1px solid rgba(204, 230, 246, 0.3);
+}
+
+#drawScreen:not(.hidden) #backButton:hover {
+  background: rgba(204, 230, 246, 0.2);
+  transform: translateX(-3px);
+}
+
+#drawScreen:not(.hidden) .roulette-viewport {
+  height: 360px;
+}
+
+#drawScreen:not(.hidden) .roulette-item {
+  height: 72px;
+  font-size: 22px;
+}
+
+#drawScreen:not(.hidden) #selectWinnerButton {
+  padding: 14px 32px;
+  font-size: 17px;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  #drawScreen:not(.hidden) .roulette-viewport {
+    height: 300px;
+  }
+  
+  #drawScreen:not(.hidden) .roulette-item {
+    height: 60px;
+    font-size: 18px;
+  }
+  
+  #drawScreen:not(.hidden) #selectWinnerButton {
+    padding: 12px 24px;
+    font-size: 16px;
+  }
+}
+
+.app {
+  position: relative;
+}
+
+body.draw-mode .logo-container {
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body.draw-mode #drawScreen {
+  margin-top: 0;
+  transform: scale(1.02);
+  min-height: 85vh;
+}
+
+body.setup-mode .logo-container {
+  opacity: 1;
+  visibility: visible;
+  height: auto;
+  margin: 0 auto 40px auto;
+  padding: 20px;
+}
+
+body.setup-mode #setupScreen {
+  margin-top: 20px;
+}
+
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    filter: drop-shadow(0 0 12px rgba(148, 191, 86, 0.9));
+  }
+  25% {
+    transform: translateY(-15px) rotate(-5deg) scale(1.1);
+    filter: drop-shadow(0 0 18px rgba(148, 191, 86, 0.95));
+  }
+  50% {
+    transform: translateY(-25px) rotate(5deg) scale(1.15);
+    filter: drop-shadow(0 0 25px rgba(204, 230, 246, 0.9));
+  }
+  75% {
+    transform: translateY(-10px) rotate(-3deg) scale(1.05);
+    filter: drop-shadow(0 0 18px rgba(148, 191, 86, 0.95));
+  }
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    filter: drop-shadow(0 0 12px rgba(148, 191, 86, 0.9));
+  }
+}
+
+@keyframes diceRoll {
+  from {
+    transform: rotateZ(0);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+#drawButton .icon {
+  display: inline-block;
+  animation: diceRoll 3s linear infinite;
 }

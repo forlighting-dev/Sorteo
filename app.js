@@ -61,7 +61,7 @@ function renderBaseRouletteList() {
     const item = document.createElement('div');
     item.className = 'roulette-item';
     item.dataset.id = p.id.toString();
-    item.textContent = p.name; // Solo mostrar el nombre en la ruleta
+    item.textContent = p.name;
     rouletteListEl.appendChild(item);
   });
   rouletteListEl.style.transition = 'none';
@@ -69,7 +69,6 @@ function renderBaseRouletteList() {
 }
 
 function openWinnerOverlay(winnerObj) {
-  // Mostrar nombre y departamento en el overlay
   winnerOverlayName.innerHTML = `
     <div class="winner-name">${winnerObj.name}</div>
     <div class="winner-department">${winnerObj.department || 'Sin departamento'}</div>
@@ -78,7 +77,6 @@ function openWinnerOverlay(winnerObj) {
   winnerOverlay.setAttribute('aria-hidden', 'false');
   attendedCheckbox.checked = false;
   
-  // Remover animación previa y agregar nueva
   const winnerNameElement = winnerOverlayName.querySelector('.winner-name');
   winnerNameElement.classList.remove('animate');
   void winnerNameElement.offsetWidth;
@@ -107,7 +105,6 @@ function downloadWinnersCSV() {
     return;
   }
   const lines = [];
-  // Encabezados con las nuevas columnas
   lines.push(['Nombre', 'Departamento', 'Asistio']);
   winnersHistory.forEach(w => {
     lines.push([
@@ -165,7 +162,6 @@ async function selectRandomWinner() {
   const randomIndex = Math.floor(Math.random() * remainingParticipants.length);
   const winnerObj = remainingParticipants[randomIndex];
 
-  // Calcular vueltas para que dure mínimo 10 segundos
   const targetAnimationTime = 10000;
   const minItemsPerSecond = 15;
   const minTotalItems = Math.ceil((targetAnimationTime / 1000) * minItemsPerSecond);
@@ -181,7 +177,7 @@ async function selectRandomWinner() {
     const it = document.createElement('div');
     it.className = 'roulette-item';
     it.dataset.id = p.id.toString();
-    it.textContent = p.name; // Solo mostrar nombre en la ruleta
+    it.textContent = p.name;
     rouletteListEl.appendChild(it);
   });
 
@@ -240,7 +236,6 @@ function startDraw() {
     return;
   }
 
-  // Procesar cada línea en formato: NOMBRE,DEPARTAMENTO
   allParticipants = lines.map((line, index) => {
     const parts = line.split(',').map(part => part.trim());
     return {
@@ -257,6 +252,9 @@ function startDraw() {
   
   setupScreen.classList.add('hidden');
   drawScreen.classList.remove('hidden');
+  
+  document.body.classList.remove('setup-mode');
+  document.body.classList.add('draw-mode');
 }
 
 function resetToSetup() {
@@ -269,7 +267,12 @@ function resetToSetup() {
   setupScreen.classList.remove('hidden');
   
   winnerOverlay.classList.remove('show');
+  
+  document.body.classList.remove('draw-mode');
+  document.body.classList.add('setup-mode');
 }
+
+document.body.classList.add('setup-mode');
 
 drawButton.addEventListener('click', () => {
   startDraw();

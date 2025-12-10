@@ -6,9 +6,8 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
+<body class="setup-mode">
   <div class="app">
-    <!-- Logo en la parte superior -->
     <div class="logo-container">
       <img src="Resources/Logo.png" alt="Logo del sorteo" class="main-logo">
     </div>
@@ -21,8 +20,9 @@
             Sorteo en vivo
           </div>
           <h1 class="title">
-            <span class="emoji">🎰</span>
-            Sorteo de premios
+            <span class="emoji">🎁</span>
+            Sorteo Posada Forlighting 
+            <script>document.write(new Date().getFullYear())</script>
           </h1>
         </div>
         <button id="downloadExcelBtn" class="icon-excel" title="Descargar ganadores (Excel/CSV)">
@@ -35,12 +35,12 @@
           <span>Participantes</span>
           <small>Formato: Nombre,Departamento (uno por línea)</small>
         </div>
-        <textarea id="participants" placeholder="Ej:&#10;Juan Pérez,Ventas&#10;María López,Marketing&#10;Carlos Ruiz,TI"></textarea>
+        <textarea id="participants" placeholder="Ejemplo:&#10;Jesús Rodríguez,TI&#10;Mario Uex,TI&#10;Josué Garcia,TI"></textarea>
 
         <div class="controls">
           <button id="drawButton" class="button">
             <span class="icon">🎲</span>
-            <span>¡Sortear ganadores!</span>
+            <span>Iniciar Sorteo</span>
           </button>
         </div>
       </div>
@@ -75,7 +75,7 @@
       <div class="draw-controls">
         <button id="selectWinnerButton" class="button">
           <span class="icon">🎯</span>
-          <span>Seleccionar ganador</span>
+          <span>Girar</span>
         </button>
       </div>
     </div>
