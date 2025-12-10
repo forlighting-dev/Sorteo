@@ -24,6 +24,11 @@ let winnersHistory = [];
 let isSelecting = false;
 let currentWinner = null;
 
+// Variables para controlar el audio
+const rouletteSound = new Audio('Resources/Ruleta.mp3');
+const winnerSound = new Audio('Resources/Ganador.mp3');
+winnerSound.loop = true;
+
 function showToast(message, icon = "⚠️") {
   const toast = document.createElement('div');
   toast.className = 'toast';
@@ -83,11 +88,21 @@ function openWinnerOverlay(winnerObj) {
   winnerNameElement.classList.remove('animate');
   void winnerNameElement.offsetWidth;
   winnerNameElement.classList.add('animate');
+  
+  // Reproducir sonido del ganador en loop
+  winnerSound.currentTime = 0;
+  winnerSound.play().catch(e => {
+    console.log("No se pudo reproducir el audio del ganador:", e);
+  });
 }
 
 function closeWinnerOverlay() {
   winnerOverlay.classList.remove('show');
   winnerOverlay.setAttribute('aria-hidden', 'true');
+  
+  // Detener sonido del ganador
+  winnerSound.pause();
+  winnerSound.currentTime = 0;
   
   if (currentWinner && attendedCheckbox.checked) {
     winnersHistory.push({
@@ -117,15 +132,13 @@ function downloadWinnersCSV() {
     return;
   }
 
-  // Aquí se separan con punto y coma
   let lines = ["Nombre;Departamento;Asistio"];
 
   winnersHistory.forEach(w => {
-    const name = (w.name || "").replace(/"/g, '""').toUpperCase(); // Mayúsculas
-    const dept = (w.department || "").replace(/"/g, '""').toUpperCase(); // Mayúsculas
+    const name = (w.name || "").replace(/"/g, '""').toUpperCase(); 
+    const dept = (w.department || "").replace(/"/g, '""').toUpperCase(); 
     const attended = w.attended ? "Si" : "No";
 
-    // Aquí se separan con punto y coma
     lines.push(`"${name}";"${dept}";${attended}`);
   });
 
@@ -142,8 +155,6 @@ function downloadWinnersCSV() {
 
   URL.revokeObjectURL(url);
 }
-
-
 
 async function showConfettiBurst() {
   const colors = ['#f97316', '#facc15', '#22c55e', '#38bdf8', '#a855f7', '#ec4899'];
@@ -223,16 +234,25 @@ async function selectRandomWinner() {
 
   await sleep(10);
 
+  // Reproducir sonido de ruleta
+  rouletteSound.currentTime = 0;
+  rouletteSound.play().catch(e => {
+    console.log("No se pudo reproducir el audio de ruleta:", e);
+  });
+  
   rouletteListEl.style.transition = `transform ${spinDurationMs}ms cubic-bezier(0.1, 0.7, 0.1, 1)`;
   rouletteListEl.style.transform = `translateY(${finalTranslate}px)`;
 
   await sleep(spinDurationMs + 500);
 
+  // Detener sonido de ruleta
+  rouletteSound.pause();
+  rouletteSound.currentTime = 0;
+
   openWinnerOverlay(winnerObj);
   await showConfettiBurst();
   setTimeout(showConfettiBurst, 550);
 
-  
   remainingParticipants.splice(randomIndex, 1);
 }
 
@@ -279,6 +299,11 @@ function resetToSetup() {
   currentWinner = null;
   attendedCheckbox.checked = false;
   
+  // Detener todos los sonidos al volver
+  rouletteSound.pause();
+  rouletteSound.currentTime = 0;
+  winnerSound.pause();
+  winnerSound.currentTime = 0;
   
   updateStatus();
   drawScreen.classList.add('hidden');
