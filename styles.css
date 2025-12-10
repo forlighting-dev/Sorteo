@@ -35,7 +35,6 @@ body {
   display: none;
 }
 
-/* Encabezados y badges */
 
 .title {
   font-size: 34px;
@@ -81,7 +80,6 @@ body {
   }
 }
 
-/* Textarea y controles iniciales */
 
 .textarea-label {
   font-size: 16px;
@@ -126,7 +124,6 @@ textarea:focus {
   gap: 16px;
 }
 
-/* Botones */
 
 .button {
   position: relative;
@@ -221,7 +218,6 @@ textarea:focus {
   color: #9ca3af;
 }
 
-/* Pantalla 2: Ruleta */
 
 .draw-header {
   display: flex;
@@ -292,7 +288,6 @@ textarea:focus {
   padding: 0 16px;
 }
 
-/* Banda central con flechas */
 
 .roulette-highlight {
   pointer-events: none;
@@ -322,13 +317,13 @@ textarea:focus {
 }
 
 .roulette-arrow.left {
-  border-right: 26px solid #f97316;  /* flecha naranja hacia el centro */
+  border-right: 26px solid #f97316; 
   margin-left: -26px;
   filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.9));
 }
 
 .roulette-arrow.right {
-  border-left: 26px solid #f97316;   /* flecha naranja hacia el centro */
+  border-left: 26px solid #f97316;  
   margin-right: -26px;
   filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.9));
 }
@@ -340,7 +335,6 @@ textarea:focus {
   gap: 16px;
 }
 
-/* Confeti */
 
 .confetti-piece {
   position: fixed;
@@ -361,7 +355,6 @@ textarea:focus {
   }
 }
 
-/* Toast */
 
 .toast {
   position: fixed;
@@ -400,7 +393,6 @@ textarea:focus {
   opacity: 0.7;
 }
 
-/* Overlay de ganador */
 
 .winner-overlay {
   position: fixed;
@@ -470,4 +462,143 @@ textarea:focus {
     transform: scale(1) translateY(0) rotate(0deg);
     opacity: 1;
   }
+}
+
+.setup-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.icon-excel {
+  background: linear-gradient(135deg,#10b981,#06b6d4);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(6, 182, 212, 0.12);
+}
+.icon-excel:hover { transform: translateY(-2px); }
+
+.winner-overlay-content {
+  position: relative; 
+  text-align: center;
+  padding: 40px 60px;
+  border-radius: 40px;
+  background: radial-gradient(circle at top, rgba(248, 250, 252, 0.06), rgba(15, 23, 42, 0.96));
+  border: 1px solid rgba(248, 250, 252, 0.14);
+  box-shadow: 0 50px 150px rgba(0, 0, 0, 0.9);
+  max-width: 1100px;
+}
+
+.close-winner {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  background: rgba(255,255,255,0.06);
+  color: #f8fafc;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+.close-winner:hover { transform: scale(1.03); }
+
+.attended-checkbox {
+  position: absolute;
+  right: 22px;
+  bottom: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15,23,42,0.55);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  color: #e6e6e6;
+  border: 1px solid rgba(148,163,184,0.12);
+}
+.attended-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #10b981;
+}
+
+.winner-overlay-name { margin: 12px 0 40px; }
+
+
+
+.empty-rulette {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 320px;
+  color: #9ca3af;
+  font-size: 18px;
+  font-style: italic;
+}
+
+.winner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(3, 7, 18, 0.98));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-out;
+  cursor: pointer; 
+}
+
+.winner-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.winner-overlay-content {
+  cursor: default; 
+}
+
+.winner-overlay-name.animate {
+  animation: overlayPop 0.9s cubic-bezier(0.2, 1.4, 0.3, 1) forwards;
+}
+
+@keyframes overlayPop {
+  0% {
+    transform: scale(0) translateY(30px) rotate(-10deg);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(1.2) translateY(-8px) rotate(3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.roulette-list {
+  transition-timing-function: cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.roulette-item {
+  transition: all 0.3s ease;
 }

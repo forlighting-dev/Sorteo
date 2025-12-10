@@ -1,6 +1,5 @@
 const participantsTextarea = document.getElementById('participants');
 const drawButton = document.getElementById('drawButton');
-const winnerCountInput = document.getElementById('winnerCountInput');
 
 const setupScreen = document.getElementById('setupScreen');
 const drawScreen = document.getElementById('drawScreen');
@@ -10,18 +9,18 @@ const rouletteViewport = document.getElementById('rouletteViewport');
 const rouletteListEl = document.getElementById('rouletteList');
 
 const selectWinnerButton = document.getElementById('selectWinnerButton');
-const winnersSoFarEl = document.getElementById('winnersSoFar');
-const winnersTotalEl = document.getElementById('winnersTotal');
-const participantsRemainingEl = document.getElementById('participantsRemaining');
 const drawHelperText = document.getElementById('drawHelperText');
 
 const winnerOverlay = document.getElementById('winnerOverlay');
 const winnerOverlayName = document.getElementById('winnerOverlayName');
+const closeWinnerBtn = document.getElementById('closeWinnerBtn');
+const attendedCheckbox = document.getElementById('attendedCheckbox');
+
+const downloadExcelBtn = document.getElementById('downloadExcelBtn');
 
 let allParticipants = [];
 let remainingParticipants = [];
-let winners = [];
-let requestedWinners = 0;
+let winnersHistory = [];
 let isSelecting = false;
 
 function showToast(message, icon = "⚠️") {
@@ -33,40 +32,12 @@ function showToast(message, icon = "⚠️") {
     <span class="toast-close">✕</span>
   `;
   document.body.appendChild(toast);
-
-  toast.querySelector('.toast-close').addEventListener('click', () => {
-    toast.remove();
-  });
-
+  toast.querySelector('.toast-close').addEventListener('click', () => toast.remove());
   setTimeout(() => {
     toast.style.opacity = '0';
     toast.style.transform = 'translateY(12px)';
-    setTimeout(() => toast.remove(), 250);
+    setTimeout(() => toast.remove(), 260);
   }, 3500);
-}
-
-// Confeti intenso
-function createConfettiBurst() {
-  const colors = ['#f97316', '#facc15', '#22c55e', '#38bdf8', '#a855f7', '#ec4899'];
-  const pieces = 130;
-
-  for (let i = 0; i < pieces; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    const size = 8 + Math.random() * 6;
-    const left = Math.random() * 100;
-    const duration = 2.8 + Math.random() * 2.0;
-
-    piece.style.left = left + 'vw';
-    piece.style.width = size + 'px';
-    piece.style.height = (size + 4) + 'px';
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.animationDuration = duration + 's';
-
-    document.body.appendChild(piece);
-
-    setTimeout(() => piece.remove(), duration * 1000);
-  }
 }
 
 function shuffle(array) {
@@ -77,27 +48,15 @@ function shuffle(array) {
   return array;
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 
 function updateStatus() {
-  winnersSoFarEl.textContent = winners.length.toString();
-  winnersTotalEl.textContent = requestedWinners.toString();
-  participantsRemainingEl.textContent = remainingParticipants.length.toString();
-
-  if (winners.length >= requestedWinners || remainingParticipants.length === 0) {
-    selectWinnerButton.disabled = true;
-    drawHelperText.textContent = 'Sorteo terminado. Puedes volver atrás para un nuevo sorteo.';
-  } else {
-    selectWinnerButton.disabled = false;
-    drawHelperText.textContent = 'La ruleta girará y se detendrá en un ganador al azar.';
-  }
+  selectWinnerButton.disabled = isSelecting;
+  downloadExcelBtn.disabled = winnersHistory.length === 0;
 }
 
 function renderBaseRouletteList() {
   rouletteListEl.innerHTML = '';
-
   remainingParticipants.forEach(p => {
     const item = document.createElement('div');
     item.className = 'roulette-item';
@@ -105,48 +64,107 @@ function renderBaseRouletteList() {
     item.textContent = p.name;
     rouletteListEl.appendChild(item);
   });
-
   rouletteListEl.style.transition = 'none';
   rouletteListEl.style.transform = 'translateY(0px)';
 }
 
-async function showWinnerOverlay(name) {
+function openWinnerOverlay(name) {
   winnerOverlayName.textContent = name;
-  winnerOverlayName.classList.remove('animate');
-  void winnerOverlayName.offsetWidth; // reflow
-  winnerOverlayName.classList.add('animate');
-
   winnerOverlay.classList.add('show');
-  createConfettiBurst();
-  setTimeout(createConfettiBurst, 600);
+  winnerOverlay.setAttribute('aria-hidden', 'false');
+  attendedCheckbox.checked = false;
+  
+  winnerOverlayName.classList.remove('animate');
+  void winnerOverlayName.offsetWidth;
+  winnerOverlayName.classList.add('animate');
+}
 
-  await sleep(1800);
-
+function closeWinnerOverlay() {
   winnerOverlay.classList.remove('show');
+  winnerOverlay.setAttribute('aria-hidden', 'true');
+  
+  const lastWinner = winnersHistory[winnersHistory.length - 1];
+  if (lastWinner) {
+    lastWinner.attended = attendedCheckbox.checked;
+  }
+  
+  renderBaseRouletteList();
+  updateStatus();
+  
+  isSelecting = false;
+  selectWinnerButton.disabled = false;
+}
+
+function downloadWinnersCSV() {
+  if (winnersHistory.length === 0) {
+    showToast('No hay ganadores para exportar.', 'ℹ️');
+    return;
+  }
+  const lines = [];
+  lines.push(['Nombre','Asistió','Seleccionado en']);
+  winnersHistory.forEach(w => {
+    lines.push([`"${w.name.replace(/"/g,'""')}"`, w.attended ? 'Sí' : 'No', w.timestamp]);
+  });
+  const csv = lines.map(row => row.join(',')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const dt = new Date();
+  const stamp = dt.toISOString().slice(0,19).replace('T','_').replace(/:/g,'-');
+  a.download = `ganadores_${stamp}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function showConfettiBurst() {
+  const colors = ['#f97316', '#facc15', '#22c55e', '#38bdf8', '#a855f7', '#ec4899'];
+  const pieces = 120;
+  for (let i = 0; i < pieces; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    const size = 8 + Math.random() * 6;
+    const left = Math.random() * 100;
+    const duration = 2.4 + Math.random() * 1.8;
+    piece.style.left = left + 'vw';
+    piece.style.width = size + 'px';
+    piece.style.height = (size + 4) + 'px';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = duration + 's';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), duration * 1000);
+  }
 }
 
 async function selectRandomWinner() {
   if (isSelecting) return;
-
-  if (remainingParticipants.length === 0) {
-    showToast("Ya no hay participantes restantes.", "ℹ️");
-    return;
-  }
-  if (winners.length >= requestedWinners) {
-    showToast("Ya alcanzaste el número máximo de ganadores.", "ℹ️");
-    updateStatus();
-    return;
-  }
-
+  
   isSelecting = true;
   selectWinnerButton.disabled = true;
 
-  // Elegimos ganador al azar de los que quedan
+  if (remainingParticipants.length === 0) {
+    showToast("No hay participantes disponibles.", "ℹ️");
+    isSelecting = false;
+    selectWinnerButton.disabled = false;
+    return;
+  }
+
   const randomIndex = Math.floor(Math.random() * remainingParticipants.length);
   const winnerObj = remainingParticipants[randomIndex];
 
-  // Construimos lista extendida para que dé varias vueltas
-  const loops = 4;
+  // Calcular vueltas para que dure mínimo 10 segundos
+  // Queremos que haya muchos elementos para una animación larga y emocionante
+  const targetAnimationTime = 10000; // 10 segundos en milisegundos
+  const minItemsPerSecond = 15; // Mínimo de elementos por segundo para que se vea fluido
+  
+  // Calcular el número total de elementos necesarios para 10 segundos
+  const minTotalItems = Math.ceil((targetAnimationTime / 1000) * minItemsPerSecond);
+  
+  // Calcular cuántas vueltas completas necesitamos
+  const loops = Math.max(6, Math.ceil(minTotalItems / remainingParticipants.length));
+
   const extendedList = [];
   for (let i = 0; i < loops; i++) {
     extendedList.push(...remainingParticipants);
@@ -154,20 +172,20 @@ async function selectRandomWinner() {
 
   rouletteListEl.innerHTML = '';
   extendedList.forEach(p => {
-    const item = document.createElement('div');
-    item.className = 'roulette-item';
-    item.dataset.id = p.id.toString();
-    item.textContent = p.name;
-    rouletteListEl.appendChild(item);
+    const it = document.createElement('div');
+    it.className = 'roulette-item';
+    it.dataset.id = p.id.toString();
+    it.textContent = p.name;
+    rouletteListEl.appendChild(it);
   });
 
-  await sleep(50); // dejar que el DOM mida alturas
+  await sleep(40);
 
   const items = rouletteListEl.querySelectorAll('.roulette-item');
-  if (items.length === 0) {
-    isSelecting = false;
-    selectWinnerButton.disabled = false;
-    return;
+  if (items.length === 0) { 
+    isSelecting = false; 
+    selectWinnerButton.disabled = false; 
+    return; 
   }
 
   const rowHeight = items[0].offsetHeight;
@@ -177,46 +195,48 @@ async function selectRandomWinner() {
   const baseIndex = remainingParticipants.findIndex(p => p.id === winnerObj.id);
   const perLoop = remainingParticipants.length;
   const targetIndex = (loops - 1) * perLoop + baseIndex;
-
   const finalTranslate = -(targetIndex * rowHeight - highlightOffset);
 
-  // 🔥 Duración total del giro: 10 segundos
-  const spinDurationMs = 10000;
-
-  // Posición inicial
+  // Animación de 10 segundos con desaceleración dramática
+  const spinDurationMs = 10000; // 10 segundos total
+  
+  // Curva de easing especial para mucho drama:
+  // - Empieza rápido (0.1, 0.7)
+  // - Se mantiene rápido por un tiempo
+  // - Desacelera dramáticamente al final (0.1, 1)
+  // cubic-bezier(0.1, 0.7, 0.1, 1) - Muy dramático al final
+  
   rouletteListEl.style.transition = 'none';
   rouletteListEl.style.transform = 'translateY(0px)';
 
-  // Siguiente frame: activamos transición y movemos
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      // Curva con inicio rápido y frenado MUY suave al final
-      rouletteListEl.style.transition =
-        `transform ${spinDurationMs}ms cubic-bezier(0.08, 0.8, 0.12, 1)`;
-      rouletteListEl.style.transform = `translateY(${finalTranslate}px)`;
-    });
+  // Pequeña pausa antes de iniciar la animación
+  await sleep(10);
+
+  // Aplicar la animación con curva dramática
+  rouletteListEl.style.transition = `transform ${spinDurationMs}ms cubic-bezier(0.1, 0.7, 0.1, 1)`;
+  rouletteListEl.style.transform = `translateY(${finalTranslate}px)`;
+
+  // Esperar a que termine la animación
+  await sleep(spinDurationMs + 500);
+
+  // Mostrar ganador
+  openWinnerOverlay(winnerObj.name);
+  await showConfettiBurst();
+  setTimeout(showConfettiBurst, 550);
+
+  // Agregar a historial
+  winnersHistory.push({
+    id: winnerObj.id,
+    name: winnerObj.name,
+    timestamp: (new Date()).toLocaleString(),
+    attended: false
   });
 
-  // Esperamos a que termine el giro (un poco más por seguridad)
-  await sleep(spinDurationMs + 600);
-
-  // Overlay del ganador
-  await showWinnerOverlay(winnerObj.name);
-
-  // Actualizar estructuras: sacar ganador de la lista
-  winners.push(winnerObj);
+  // Remover de participantes
   remainingParticipants.splice(randomIndex, 1);
-  updateStatus();
-
-  // Volver a mostrar ruleta base con los que quedan
-  renderBaseRouletteList();
-
-  isSelecting = false;
 }
 
-/* --------- Flujo principal --------- */
-
-async function startDraw() {
+function startDraw() {
   const lines = participantsTextarea.value
     .split('\n')
     .map(l => l.trim())
@@ -227,32 +247,12 @@ async function startDraw() {
     return;
   }
 
-  let requested = parseInt(winnerCountInput.value, 10);
-  if (isNaN(requested) || requested <= 0) {
-    requested = 1;
-    winnerCountInput.value = '1';
-  }
-
-  if (lines.length < requested) {
-    showToast(
-      `Pediste ${requested} ganador(es), pero solo hay ${lines.length} participante(s). Se sortearán todos ellos.`,
-      "ℹ️"
-    );
-  }
-
-  requestedWinners = Math.min(requested, lines.length);
-
-  allParticipants = lines.map((name, index) => ({
-    id: index + 1,
-    name
-  }));
-
+  allParticipants = lines.map((name, index) => ({ id: index + 1, name }));
   remainingParticipants = shuffle([...allParticipants]);
-  winners = [];
-
-  renderBaseRouletteList();
+  
   updateStatus();
-
+  renderBaseRouletteList();
+  
   setupScreen.classList.add('hidden');
   drawScreen.classList.remove('hidden');
 }
@@ -260,38 +260,58 @@ async function startDraw() {
 function resetToSetup() {
   allParticipants = [];
   remainingParticipants = [];
-  winners = [];
-  requestedWinners = 0;
   isSelecting = false;
-
   rouletteListEl.innerHTML = '';
-  winnersSoFarEl.textContent = '0';
-  winnersTotalEl.textContent = '0';
-  participantsRemainingEl.textContent = '0';
-  drawHelperText.textContent = 'La ruleta girará y se detendrá en un ganador al azar.';
-
+  updateStatus();
   drawScreen.classList.add('hidden');
   setupScreen.classList.remove('hidden');
+  
+  winnerOverlay.classList.remove('show');
 }
 
-/* --------- Event listeners --------- */
-
 drawButton.addEventListener('click', () => {
-  startDraw().catch(err => {
-    console.error(err);
-    showToast("Ocurrió un error al iniciar el sorteo.", "💥");
-  });
+  startDraw();
 });
 
 selectWinnerButton.addEventListener('click', () => {
-  selectRandomWinner().catch(err => {
-    console.error(err);
-    isSelecting = false;
-    selectWinnerButton.disabled = false;
-    showToast("Ocurrió un error al seleccionar el ganador.", "💥");
+  selectRandomWinner().catch(err => { 
+    console.error(err); 
+    isSelecting = false; 
+    selectWinnerButton.disabled = false; 
+    showToast("Error seleccionando ganador","💥"); 
   });
 });
 
 backButton.addEventListener('click', () => {
   resetToSetup();
 });
+
+attendedCheckbox.addEventListener('change', (e) => {
+  const lastWinner = winnersHistory[winnersHistory.length - 1];
+  if (lastWinner) {
+    lastWinner.attended = e.target.checked;
+    updateStatus();
+  }
+});
+
+closeWinnerBtn.addEventListener('click', () => {
+  closeWinnerOverlay();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && winnerOverlay.classList.contains('show')) {
+    closeWinnerOverlay();
+  }
+});
+
+winnerOverlay.addEventListener('click', (e) => {
+  if (e.target === winnerOverlay) {
+    closeWinnerOverlay();
+  }
+});
+
+downloadExcelBtn.addEventListener('click', () => {
+  downloadWinnersCSV();
+});
+
+updateStatus();

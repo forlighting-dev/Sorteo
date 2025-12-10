@@ -7,24 +7,31 @@
 </head>
 
 <body>
+  
   <div class="app">
-    <!-- PANTALLA 1: INGRESAR PARTICIPANTES -->
     <div id="setupScreen" class="card">
-      <div>
-        <div class="badge">
-          <div class="badge-dot"></div>
-          Sorteo en vivo
+      <div class="setup-top">
+        <div>
+          <div class="badge">
+            <div class="badge-dot"></div>
+            Sorteo en vivo
+          </div>
+          <h1 class="title">
+            <span class="emoji">🎰</span>
+            Sorteo de premios
+          </h1>
         </div>
-        <h1 class="title">
-          <span class="emoji">🎰</span>
-          Sorteo de premios
-        </h1>
+        <button id="downloadExcelBtn" class="icon-excel" title="Descargar ganadores (Excel/CSV)">
+          📥 Ganadores
+        </button>
+      </div>
 
+      <div>
         <div class="textarea-label">
           <span>Participantes</span>
           <small>1 nombre por línea</small>
         </div>
-        <textarea id="participants"></textarea>
+        <textarea id="participants" placeholder="Ej:&#10;Juan Pérez&#10;María López&#10;Carlos Ruiz"></textarea>
 
         <div class="controls">
           <button id="drawButton" class="button">
@@ -32,15 +39,10 @@
             <span>¡Sortear ganadores!</span>
           </button>
 
-          <label class="winner-config" title="Cuántos ganadores quieres que se elijan">
-            Ganadores:
-            <input type="number" id="winnerCountInput" value="3" min="1" max="1000" />
-          </label>
         </div>
       </div>
     </div>
 
-    <!-- PANTALLA 2: RULETA VERTICAL -->
     <div id="drawScreen" class="card hidden">
       <div class="draw-header">
         <button id="backButton" class="icon-button" title="Volver a ingresar participantes">
@@ -49,10 +51,6 @@
 
         <div class="draw-status">
           <div class="draw-title">Sorteo en progreso</div>
-          <div class="draw-subtitle">
-            Ganadores: <span id="winnersSoFar">0</span>/<span id="winnersTotal">0</span> ·
-            Restantes: <span id="participantsRemaining">0</span>
-          </div>
         </div>
       </div>
 
@@ -61,11 +59,8 @@
 
         <div class="roulette-container">
           <div id="rouletteViewport" class="roulette-viewport">
-            <div id="rouletteList" class="roulette-list">
-              <!-- Items dinámicos -->
-            </div>
+            <div id="rouletteList" class="roulette-list"></div>
 
-            <!-- Banda central con flechas -->
             <div class="roulette-highlight">
               <div class="roulette-arrow left"></div>
               <div class="roulette-arrow right"></div>
@@ -79,18 +74,22 @@
           <span class="icon">🎯</span>
           <span>Seleccionar ganador</span>
         </button>
-        <span class="helper-text" id="drawHelperText">
-          La ruleta girará y se detendrá en un ganador al azar.
-        </span>
       </div>
     </div>
   </div>
 
-  <!-- OVERLAY PANTALLA COMPLETA PARA GANADOR -->
-  <div id="winnerOverlay" class="winner-overlay">
+  <div id="winnerOverlay" class="winner-overlay" aria-hidden="true">
     <div class="winner-overlay-content">
+      <button id="closeWinnerBtn" class="close-winner" aria-label="Cerrar ganador">✕</button>
+
       <div class="winner-overlay-title">🎉 GANADOR 🎉</div>
+
       <div id="winnerOverlayName" class="winner-overlay-name">Nombre</div>
+
+      <label class="attended-checkbox">
+        <input type="checkbox" id="attendedCheckbox" />
+        ¿Asistió?
+      </label>
     </div>
   </div>
 
