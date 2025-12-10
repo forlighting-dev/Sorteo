@@ -299,21 +299,13 @@ attendedCheckbox.addEventListener('change', (e) => {
   }
 });
 
+// SOLO el botón de cerrar puede cerrar el modal
 closeWinnerBtn.addEventListener('click', () => {
   closeWinnerOverlay();
 });
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && winnerOverlay.classList.contains('show')) {
-    closeWinnerOverlay();
-  }
-});
-
-winnerOverlay.addEventListener('click', (e) => {
-  if (e.target === winnerOverlay) {
-    closeWinnerOverlay();
-  }
-});
+// Se han ELIMINADO los eventos que cerraban el modal con Escape o clic fuera
+// para evitar cierres accidentales
 
 downloadExcelBtn.addEventListener('click', () => {
   downloadWinnersCSV();
