@@ -24,7 +24,6 @@ let winnersHistory = [];
 let isSelecting = false;
 let currentWinner = null;
 
-// Variables para controlar el audio
 const rouletteSound = new Audio('Resources/Ruleta.mp3');
 const winnerSound = new Audio('Resources/Ganador.mp3');
 winnerSound.loop = true;
@@ -89,7 +88,6 @@ function openWinnerOverlay(winnerObj) {
   void winnerNameElement.offsetWidth;
   winnerNameElement.classList.add('animate');
   
-  // Reproducir sonido del ganador en loop
   winnerSound.currentTime = 0;
   winnerSound.play().catch(e => {
     console.log("No se pudo reproducir el audio del ganador:", e);
@@ -100,7 +98,6 @@ function closeWinnerOverlay() {
   winnerOverlay.classList.remove('show');
   winnerOverlay.setAttribute('aria-hidden', 'true');
   
-  // Detener sonido del ganador
   winnerSound.pause();
   winnerSound.currentTime = 0;
   
@@ -113,7 +110,7 @@ function closeWinnerOverlay() {
       attended: true
     });
     
-    showToast(`${currentWinner.name} guardado como asistente`, "✅");
+    showToast(`${currentWinner.name} guardado como ganador`, "✅");
   }
   
   currentWinner = null; 
@@ -133,12 +130,10 @@ function downloadWinnersExcel() {
   }
 
   try {
-    // Crear una nueva hoja de cálculo
     const workbook = XLSX.utils.book_new();
     
-    // Crear los datos para la hoja
     const data = [
-      ["Nombre", "Departamento", "Asistió"], // Encabezados
+      ["Nombre", "Departamento", "Ganador"], 
       ...winnersHistory.map(winner => [
         winner.name || "",
         winner.department || "",
@@ -146,20 +141,16 @@ function downloadWinnersExcel() {
       ])
     ];
     
-    // Convertir los datos a una hoja de trabajo
     const worksheet = XLSX.utils.aoa_to_sheet(data);
     
-    // Establecer propiedades de la hoja
     worksheet["!cols"] = [
-      { wch: 30 }, // Ancho columna Nombre
-      { wch: 25 }, // Ancho columna Departamento
-      { wch: 15 }  // Ancho columna Asistió
+      { wch: 30 },
+      { wch: 25 }, 
+      { wch: 15 }  
     ];
     
-    // Agregar la hoja al libro de trabajo
     XLSX.utils.book_append_sheet(workbook, worksheet, "Ganadores");
     
-    // Generar el archivo Excel
     const stamp = new Date().toISOString()
       .replace(/:/g, '-')
       .replace('T', '_')
@@ -167,7 +158,6 @@ function downloadWinnersExcel() {
     
     const fileName = `ganadores_${stamp}.xlsx`;
     
-    // Descargar el archivo
     XLSX.writeFile(workbook, fileName);
     
     showToast('Archivo Excel generado exitosamente', '📊');
@@ -176,7 +166,6 @@ function downloadWinnersExcel() {
     console.error("Error al generar el archivo Excel:", error);
     showToast('Error al generar el archivo Excel', '❌');
     
-    // Fallback a CSV si falla Excel
     showToast('Intentando generar archivo CSV como alternativa...', '⚠️');
     downloadWinnersCSV();
   }
@@ -251,10 +240,15 @@ async function selectRandomWinner() {
   const minTotalItems = Math.ceil((targetAnimationTime / 1000) * minItemsPerSecond);
   const loops = Math.max(6, Math.ceil(minTotalItems / remainingParticipants.length));
 
+  const baseOrder = [...remainingParticipants]; 
   const extendedList = [];
-  for (let i = 0; i < loops; i++) {
-    extendedList.push(...remainingParticipants);
+
+  for (let i = 0; i < loops - 1; i++) {
+    extendedList.push(...shuffle([...baseOrder]));
   }
+
+  extendedList.push(...baseOrder);
+
 
   rouletteListEl.innerHTML = '';
   extendedList.forEach(p => {
